@@ -1,0 +1,339 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2360" height="2215" viewBox="0 0 2360 2215" font-family="Inter, Arial, sans-serif" xmlns:c2pa="http://c2pa.org/manifest">
+<rect width="2360" height="2215" fill="#FFFFFF"/>
+<path d="M860,131.65 L823,131.65 Q817,131.65 817,137.65 L817,1194.15 Q817,1200.15 823,1200.15 L860,1200.15" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="840" y1="142.65" x2="840" y2="120.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="838" y1="1200.15" x2="860" y2="1212.15" stroke="#4E5360" stroke-width="1.6"/><line x1="838" y1="1200.15" x2="860" y2="1188.15" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M1660,109.65 L1546,109.65 Q1540,109.65 1540,115.65 L1540,759.85 Q1540,765.85 1534,765.85 L1422,765.85" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="1640" y1="120.65" x2="1640" y2="98.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="1444" y1="765.85" x2="1422" y2="753.85" stroke="#4E5360" stroke-width="1.6"/><line x1="1444" y1="765.85" x2="1422" y2="777.85" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M1422,584.65 L1459,584.65 Q1465,584.65 1465,590.65 L1465,1239.45 Q1465,1245.45 1459,1245.45 L1422,1245.45" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="1442" y1="573.65" x2="1442" y2="595.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="1444" y1="1245.45" x2="1422" y2="1233.45" stroke="#4E5360" stroke-width="1.6"/><line x1="1444" y1="1245.45" x2="1422" y2="1257.45" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M1422,973.65 L1546,973.65 Q1552,973.65 1552,979.65 L1552,1414.8500000000001 Q1552,1420.8500000000001 1558,1420.8500000000001 L1682,1420.8500000000001" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="1442" y1="962.65" x2="1442" y2="984.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="1660" y1="1420.8500000000001" x2="1682" y2="1432.8500000000001" stroke="#4E5360" stroke-width="1.6"/><line x1="1660" y1="1420.8500000000001" x2="1682" y2="1408.8500000000001" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M1562,973.65 L1562,763.65 Q1562,757.65 1568,757.65 L1702,757.65" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+
+<line x1="1680" y1="757.65" x2="1702" y2="769.65" stroke="#4E5360" stroke-width="1.6"/><line x1="1680" y1="757.65" x2="1702" y2="745.65" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M1552,973.65 L1682,973.65" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+
+<line x1="1660" y1="973.65" x2="1682" y2="985.65" stroke="#4E5360" stroke-width="1.6"/><line x1="1660" y1="973.65" x2="1682" y2="961.65" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M2244,433.65 L2301,433.65 Q2307,433.65 2307,439.65 L2307,796.9499999999999 Q2307,802.9499999999999 2301,802.9499999999999 L2264,802.9499999999999" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="2264" y1="422.65" x2="2264" y2="444.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="2286" y1="802.9499999999999" x2="2264" y2="790.9499999999999" stroke="#4E5360" stroke-width="1.6"/><line x1="2286" y1="802.9499999999999" x2="2264" y2="814.9499999999999" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M2244,1599.65 L2284,1599.65 Q2290,1599.65 2290,1593.65 L2290,1022.9499999999999 Q2290,1016.9499999999999 2284,1016.9499999999999 L2244,1016.9499999999999" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="2264" y1="1588.65" x2="2264" y2="1610.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="2266" y1="1016.9499999999999" x2="2244" y2="1004.9499999999999" stroke="#4E5360" stroke-width="1.6"/><line x1="2266" y1="1016.9499999999999" x2="2244" y2="1028.9499999999998" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M622,626.65 L694,626.65 Q700,626.65 700,620.65 L700,318.84999999999997 Q700,312.84999999999997 706,312.84999999999997 L860,312.84999999999997" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="642" y1="615.65" x2="642" y2="637.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="840" y1="323.84999999999997" x2="840" y2="301.84999999999997" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M60,626.65 L28,626.65 Q22,626.65 22,632.65 L22,2166 Q22,2172 28,2172 L734,2172 Q740,2172 740,2166 L740,1879.75 Q740,1873.75 746,1873.75 L860,1873.75" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="40" y1="637.65" x2="40" y2="615.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="838" y1="1873.75" x2="860" y2="1885.75" stroke="#4E5360" stroke-width="1.6"/><line x1="838" y1="1873.75" x2="860" y2="1861.75" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M622,1178.45 L817,1178.45" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="644" y1="1178.45" x2="622" y2="1166.45" stroke="#4E5360" stroke-width="1.6"/><line x1="644" y1="1178.45" x2="622" y2="1190.45" stroke="#4E5360" stroke-width="1.6"/>
+
+<path d="M622,1223.75 L759,1223.75 Q765,1223.75 765,1217.75 L765,979.65 Q765,973.65 771,973.65 L860,973.65" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="644" y1="1223.75" x2="622" y2="1211.75" stroke="#4E5360" stroke-width="1.6"/><line x1="644" y1="1223.75" x2="622" y2="1235.75" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="840" y1="984.65" x2="840" y2="962.65" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M622,1366.65 L759,1366.65 Q765,1366.65 765,1360.65 L765,1223.75" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="644" y1="1366.65" x2="622" y2="1354.65" stroke="#4E5360" stroke-width="1.6"/><line x1="644" y1="1366.65" x2="622" y2="1378.65" stroke="#4E5360" stroke-width="1.6"/>
+
+<path d="M60,1606.65 L42,1606.65 Q36,1606.65 36,1600.65 L36,1417.95 Q36,1411.95 42,1411.95 L60,1411.95" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="40" y1="1617.65" x2="40" y2="1595.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="38" y1="1411.95" x2="60" y2="1423.95" stroke="#4E5360" stroke-width="1.6"/><line x1="38" y1="1411.95" x2="60" y2="1399.95" stroke="#4E5360" stroke-width="1.6"/>
+<path d="M622,1981.65 L684,1981.65 Q690,1981.65 690,1975.65 L690,1839.15 Q690,1833.15 684,1833.15 L622,1833.15" fill="none" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="642" y1="1970.65" x2="642" y2="1992.65" stroke="#4E5360" stroke-width="1.6"/>
+<line x1="644" y1="1833.15" x2="622" y2="1821.15" stroke="#4E5360" stroke-width="1.6"/><line x1="644" y1="1833.15" x2="622" y2="1845.15" stroke="#4E5360" stroke-width="1.6"/>
+<clipPath id="c86065"><rect x="860" y="65" width="562" height="270.5" rx="10"/></clipPath>
+<g clip-path="url(#c86065)">
+<rect x="860" y="65" width="562" height="270.5" fill="#FFFFFF"/>
+<rect x="860" y="65" width="562" height="44" fill="#9391FF"/>
+</g>
+<rect x="860" y="65" width="562" height="270.5" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="860" y1="109" x2="1422" y2="109" stroke="#3A3D45" stroke-width="2"/>
+<text x="1141.0" y="97.0" font-size="28" text-anchor="middle" fill="#1F2128">Clientes</text>
+<text x="867" y="141.65" font-size="28" fill="#1F2128">ID_Cliente</text>
+<text x="1410" y="141.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="867" y="186.95000000000002" font-size="28" fill="#1F2128">RazonSocial_Apellido</text>
+<text x="1410" y="186.95000000000002" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(150)</text>
+<text x="867" y="232.25" font-size="28" fill="#1F2128">Domicilio_Legal</text>
+<text x="1410" y="232.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(255)</text>
+<text x="867" y="277.54999999999995" font-size="28" fill="#1F2128">Telefono</text>
+<text x="1410" y="277.54999999999995" font-size="28" text-anchor="end" fill="#1F2128">Int(10)</text>
+<text x="867" y="322.84999999999997" font-size="28" fill="#1F2128">IdentityUserId</text>
+<text x="1410" y="322.84999999999997" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c860518"><rect x="860" y="518" width="562" height="270.5" rx="10"/></clipPath>
+<g clip-path="url(#c860518)">
+<rect x="860" y="518" width="562" height="270.5" fill="#FFFFFF"/>
+<rect x="860" y="518" width="562" height="44" fill="#FE7070"/>
+</g>
+<rect x="860" y="518" width="562" height="270.5" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="860" y1="562" x2="1422" y2="562" stroke="#3A3D45" stroke-width="2"/>
+<text x="1141.0" y="550.0" font-size="28" text-anchor="middle" fill="#1F2128">Paquetes_Eventos</text>
+<text x="867" y="594.65" font-size="28" fill="#1F2128">ID_Paquete</text>
+<text x="1410" y="594.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="867" y="639.9499999999999" font-size="28" fill="#1F2128">Descripcion</text>
+<text x="1410" y="639.9499999999999" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(200)</text>
+<text x="867" y="685.25" font-size="28" fill="#1F2128">Valor_Base</text>
+<text x="1410" y="685.25" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<text x="867" y="730.55" font-size="28" fill="#1F2128">Horario_Referencia</text>
+<text x="1410" y="730.55" font-size="28" text-anchor="end" fill="#1F2128">time()</text>
+<text x="867" y="775.85" font-size="28" fill="#1F2128">ID_Coordinador</text>
+<text x="1410" y="775.85" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c860907"><rect x="860" y="907" width="562" height="361.09999999999997" rx="10"/></clipPath>
+<g clip-path="url(#c860907)">
+<rect x="860" y="907" width="562" height="361.09999999999997" fill="#FFFFFF"/>
+<rect x="860" y="907" width="562" height="44" fill="#FFF7A1"/>
+</g>
+<rect x="860" y="907" width="562" height="361.09999999999997" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="860" y1="951" x2="1422" y2="951" stroke="#3A3D45" stroke-width="2"/>
+<text x="1141.0" y="939.0" font-size="28" text-anchor="middle" fill="#1F2128">Contratos</text>
+<text x="867" y="983.65" font-size="28" fill="#1F2128">ID_Contrato</text>
+<text x="1410" y="983.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="867" y="1028.9499999999998" font-size="28" fill="#1F2128">Fecha_Evento</text>
+<text x="1410" y="1028.9499999999998" font-size="28" text-anchor="end" fill="#1F2128">DateTime()</text>
+<text x="867" y="1074.25" font-size="28" fill="#1F2128">Valor_Real_Acordado</text>
+<text x="1410" y="1074.25" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<text x="867" y="1119.5500000000002" font-size="28" fill="#1F2128">Ruta_Contrato_PDF</text>
+<text x="1410" y="1119.5500000000002" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(max)</text>
+<text x="867" y="1164.8500000000001" font-size="28" fill="#1F2128">Forma_Pago</text>
+<text x="1410" y="1164.8500000000001" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(50)</text>
+<text x="867" y="1210.15" font-size="28" fill="#1F2128">ID_Cliente</text>
+<text x="1410" y="1210.15" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<text x="867" y="1255.45" font-size="28" fill="#1F2128">ID_Paquete</text>
+<text x="1410" y="1255.45" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c166043"><rect x="1660" y="43" width="562" height="270.5" rx="10"/></clipPath>
+<g clip-path="url(#c166043)">
+<rect x="1660" y="43" width="562" height="270.5" fill="#FFFFFF"/>
+<rect x="1660" y="43" width="562" height="44" fill="#FE7070"/>
+</g>
+<rect x="1660" y="43" width="562" height="270.5" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="1660" y1="87" x2="2222" y2="87" stroke="#3A3D45" stroke-width="2"/>
+<text x="1941.0" y="75.0" font-size="28" text-anchor="middle" fill="#1F2128">Coordinadores</text>
+<text x="1667" y="119.65" font-size="28" fill="#1F2128">ID_Coordinador</text>
+<text x="2210" y="119.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="1667" y="164.95000000000002" font-size="28" fill="#1F2128">DNI</text>
+<text x="2210" y="164.95000000000002" font-size="28" text-anchor="end" fill="#1F2128">INT(8)</text>
+<text x="1667" y="210.25" font-size="28" fill="#1F2128">Nombre_Apellido</text>
+<text x="2210" y="210.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(150)</text>
+<text x="1667" y="255.54999999999998" font-size="28" fill="#1F2128">Telefono</text>
+<text x="2210" y="255.54999999999998" font-size="28" text-anchor="end" fill="#1F2128">INT(10)</text>
+<text x="1667" y="300.84999999999997" font-size="28" fill="#1F2128">Año_Inicio</text>
+<text x="2210" y="300.84999999999997" font-size="28" text-anchor="end" fill="#1F2128">int(4)</text>
+<clipPath id="c1682367"><rect x="1682" y="367" width="562" height="270.5" rx="10"/></clipPath>
+<g clip-path="url(#c1682367)">
+<rect x="1682" y="367" width="562" height="270.5" fill="#FFFFFF"/>
+<rect x="1682" y="367" width="562" height="44" fill="#FE7070"/>
+</g>
+<rect x="1682" y="367" width="562" height="270.5" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="1682" y1="411" x2="2244" y2="411" stroke="#3A3D45" stroke-width="2"/>
+<text x="1963.0" y="399.0" font-size="28" text-anchor="middle" fill="#1F2128">Shows_Staff</text>
+<text x="1689" y="443.65" font-size="28" fill="#1F2128">ID_Show</text>
+<text x="2232" y="443.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="1689" y="488.95" font-size="28" fill="#1F2128">Nombre_Artista</text>
+<text x="2232" y="488.95" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(150)</text>
+<text x="1689" y="534.25" font-size="28" fill="#1F2128">Tipo_Show</text>
+<text x="2232" y="534.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(100)</text>
+<text x="1689" y="579.55" font-size="28" fill="#1F2128">Horario_Show</text>
+<text x="2232" y="579.55" font-size="28" text-anchor="end" fill="#1F2128">time()</text>
+<text x="1689" y="624.85" font-size="28" fill="#1F2128">Precio_Contratacion</text>
+<text x="2232" y="624.85" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<clipPath id="c1702691"><rect x="1702" y="691" width="562" height="134.6" rx="10"/></clipPath>
+<g clip-path="url(#c1702691)">
+<rect x="1702" y="691" width="562" height="134.6" fill="#FFFFFF"/>
+<rect x="1702" y="691" width="562" height="44" fill="#FFF7A1"/>
+</g>
+<rect x="1702" y="691" width="562" height="134.6" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="1702" y1="735" x2="2264" y2="735" stroke="#3A3D45" stroke-width="2"/>
+<text x="1983.0" y="723.0" font-size="28" text-anchor="middle" fill="#1F2128">Contratos_Shows</text>
+<text x="1709" y="767.65" font-size="28" fill="#1F2128">ID_Contrato</text>
+<text x="2252" y="767.65" font-size="28" text-anchor="end" fill="#1F2128">PK/FK</text>
+<text x="1709" y="812.9499999999999" font-size="28" fill="#1F2128">ID_Show</text>
+<text x="2252" y="812.9499999999999" font-size="28" text-anchor="end" fill="#1F2128">PK/FK</text>
+<clipPath id="c1682905"><rect x="1682" y="905" width="562" height="179.89999999999998" rx="10"/></clipPath>
+<g clip-path="url(#c1682905)">
+<rect x="1682" y="905" width="562" height="179.89999999999998" fill="#FFFFFF"/>
+<rect x="1682" y="905" width="562" height="44" fill="#FFF7A1"/>
+</g>
+<rect x="1682" y="905" width="562" height="179.89999999999998" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="1682" y1="949" x2="2244" y2="949" stroke="#3A3D45" stroke-width="2"/>
+<text x="1963.0" y="937.0" font-size="28" text-anchor="middle" fill="#1F2128">Contratos_Empleados</text>
+<text x="1689" y="981.65" font-size="28" fill="#1F2128">ID_Contrato</text>
+<text x="2232" y="981.65" font-size="28" text-anchor="end" fill="#1F2128">PK/FK</text>
+<text x="1689" y="1026.9499999999998" font-size="28" fill="#1F2128">ID_Empleado</text>
+<text x="2232" y="1026.9499999999998" font-size="28" text-anchor="end" fill="#1F2128">PK/FK</text>
+<text x="1689" y="1072.25" font-size="28" fill="#1F2128">Hora_Citacion</text>
+<text x="2232" y="1072.25" font-size="28" text-anchor="end" fill="#1F2128">time()</text>
+<clipPath id="c16821173"><rect x="1682" y="1173" width="562" height="270.5" rx="10"/></clipPath>
+<g clip-path="url(#c16821173)">
+<rect x="1682" y="1173" width="562" height="270.5" fill="#FFFFFF"/>
+<rect x="1682" y="1173" width="562" height="44" fill="#FFF7A1"/>
+</g>
+<rect x="1682" y="1173" width="562" height="270.5" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="1682" y1="1217" x2="2244" y2="1217" stroke="#3A3D45" stroke-width="2"/>
+<text x="1963.0" y="1205.0" font-size="28" text-anchor="middle" fill="#1F2128">Pagos</text>
+<text x="1689" y="1249.65" font-size="28" fill="#1F2128">ID_Pago</text>
+<text x="2232" y="1249.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="1689" y="1294.95" font-size="28" fill="#1F2128">Monto</text>
+<text x="2232" y="1294.95" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<text x="1689" y="1340.25" font-size="28" fill="#1F2128">Fecha_Pago</text>
+<text x="2232" y="1340.25" font-size="28" text-anchor="end" fill="#1F2128">datetime()</text>
+<text x="1689" y="1385.5500000000002" font-size="28" fill="#1F2128">Ruta_Comprobante_Img</text>
+<text x="2232" y="1385.5500000000002" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(max)</text>
+<text x="1689" y="1430.8500000000001" font-size="28" fill="#1F2128">ID_Contrato</text>
+<text x="2232" y="1430.8500000000001" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c16821533"><rect x="1682" y="1533" width="562" height="270.5" rx="10"/></clipPath>
+<g clip-path="url(#c16821533)">
+<rect x="1682" y="1533" width="562" height="270.5" fill="#FFFFFF"/>
+<rect x="1682" y="1533" width="562" height="44" fill="#FFF7A1"/>
+<rect x="1682" y="1622.3" width="562" height="45.3" fill="#F4D9FF"/>
+<rect x="1682" y="1712.9" width="562" height="45.3" fill="#F4D9FF"/>
+</g>
+<rect x="1682" y="1533" width="562" height="270.5" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="1682" y1="1577" x2="2244" y2="1577" stroke="#3A3D45" stroke-width="2"/>
+<text x="1963.0" y="1565.0" font-size="28" text-anchor="middle" fill="#1F2128">Empleados</text>
+<text x="1689" y="1609.65" font-size="28" fill="#1F2128">ID_Empleado</text>
+<text x="2232" y="1609.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="1689" y="1654.95" font-size="28" fill="#1F2128">DNI</text>
+<text x="2232" y="1654.95" font-size="28" text-anchor="end" fill="#1F2128">INT(8)</text>
+<text x="1689" y="1700.25" font-size="28" fill="#1F2128">Nombre_Apellido</text>
+<text x="2232" y="1700.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(150)</text>
+<text x="1689" y="1745.5500000000002" font-size="28" fill="#1F2128">Puesto</text>
+<text x="2232" y="1745.5500000000002" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(100)</text>
+<text x="1689" y="1790.8500000000001" font-size="28" fill="#1F2128">Pago_Por_Evento</text>
+<text x="2232" y="1790.8500000000001" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<clipPath id="c8601490"><rect x="860" y="1490" width="562" height="406.4" rx="10"/></clipPath>
+<g clip-path="url(#c8601490)">
+<rect x="860" y="1490" width="562" height="406.4" fill="#FFFFFF"/>
+<rect x="860" y="1490" width="562" height="44" fill="#00C2A8"/>
+</g>
+<rect x="860" y="1490" width="562" height="406.4" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="860" y1="1534" x2="1422" y2="1534" stroke="#3A3D45" stroke-width="2"/>
+<text x="1141.0" y="1522.0" font-size="28" text-anchor="middle" fill="#1F2128">Auditoría</text>
+<text x="867" y="1566.65" font-size="28" fill="#1F2128">ID_Auditoria</text>
+<text x="1410" y="1566.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="867" y="1611.95" font-size="28" fill="#1F2128">Usuario_Email</text>
+<text x="1410" y="1611.95" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(255)</text>
+<text x="867" y="1657.25" font-size="28" fill="#1F2128">Entidad</text>
+<text x="1410" y="1657.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(100)</text>
+<text x="867" y="1702.5500000000002" font-size="28" fill="#1F2128">ID_Entidad</text>
+<text x="1410" y="1702.5500000000002" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(100)</text>
+<text x="867" y="1747.8500000000001" font-size="28" fill="#1F2128">Accion_Realizada</text>
+<text x="1410" y="1747.8500000000001" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(20)</text>
+<text x="867" y="1793.15" font-size="28" fill="#1F2128">Descripcion</text>
+<text x="1410" y="1793.15" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(300)</text>
+<text x="867" y="1838.45" font-size="28" fill="#1F2128">Fecha_Hora</text>
+<text x="1410" y="1838.45" font-size="28" text-anchor="end" fill="#1F2128">datetime()</text>
+<text x="867" y="1883.75" font-size="28" fill="#1F2128">ID_Usuario</text>
+<text x="1410" y="1883.75" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c60560"><rect x="60" y="560" width="562" height="225.2" rx="10"/></clipPath>
+<g clip-path="url(#c60560)">
+<rect x="60" y="560" width="562" height="225.2" fill="#FFFFFF"/>
+<rect x="60" y="560" width="562" height="44" fill="#9391FF"/>
+</g>
+<rect x="60" y="560" width="562" height="225.2" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="60" y1="604" x2="622" y2="604" stroke="#3A3D45" stroke-width="2"/>
+<text x="341.0" y="592.0" font-size="28" text-anchor="middle" fill="#1F2128">Usuarios (Identity)</text>
+<text x="67" y="636.65" font-size="28" fill="#1F2128">ID_Usuario</text>
+<text x="610" y="636.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="67" y="681.9499999999999" font-size="28" fill="#1F2128">UserName</text>
+<text x="610" y="681.9499999999999" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(256)</text>
+<text x="67" y="727.25" font-size="28" fill="#1F2128">Email</text>
+<text x="610" y="727.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(256)</text>
+<text x="67" y="772.55" font-size="28" fill="#1F2128">PasswordHash</text>
+<text x="610" y="772.55" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(max)</text>
+<clipPath id="c60840"><rect x="60" y="840" width="562" height="406.4" rx="10"/></clipPath>
+<g clip-path="url(#c60840)">
+<rect x="60" y="840" width="562" height="406.4" fill="#FFFFFF"/>
+<rect x="60" y="840" width="562" height="44" fill="#FFF7A1"/>
+</g>
+<rect x="60" y="840" width="562" height="406.4" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="60" y1="884" x2="622" y2="884" stroke="#3A3D45" stroke-width="2"/>
+<text x="341.0" y="872.0" font-size="28" text-anchor="middle" fill="#1F2128">Reseñas</text>
+<text x="67" y="916.65" font-size="28" fill="#1F2128">ID_Reseña</text>
+<text x="610" y="916.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="67" y="961.9499999999999" font-size="28" fill="#1F2128">Puntaje</text>
+<text x="610" y="961.9499999999999" font-size="28" text-anchor="end" fill="#1F2128">int</text>
+<text x="67" y="1007.25" font-size="28" fill="#1F2128">Comentario</text>
+<text x="610" y="1007.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(800)</text>
+<text x="67" y="1052.55" font-size="28" fill="#1F2128">Fecha</text>
+<text x="610" y="1052.55" font-size="28" text-anchor="end" fill="#1F2128">datetime()</text>
+<text x="67" y="1097.8500000000001" font-size="28" fill="#1F2128">Visible</text>
+<text x="610" y="1097.8500000000001" font-size="28" text-anchor="end" fill="#1F2128">bit</text>
+<text x="67" y="1143.15" font-size="28" fill="#1F2128">Respuesta</text>
+<text x="610" y="1143.15" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(800)</text>
+<text x="67" y="1188.45" font-size="28" fill="#1F2128">ID_Cliente</text>
+<text x="610" y="1188.45" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<text x="67" y="1233.75" font-size="28" fill="#1F2128">ID_Contrato</text>
+<text x="610" y="1233.75" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c601300"><rect x="60" y="1300" width="562" height="179.89999999999998" rx="10"/></clipPath>
+<g clip-path="url(#c601300)">
+<rect x="60" y="1300" width="562" height="179.89999999999998" fill="#FFFFFF"/>
+<rect x="60" y="1300" width="562" height="44" fill="#FFF7A1"/>
+</g>
+<rect x="60" y="1300" width="562" height="179.89999999999998" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="60" y1="1344" x2="622" y2="1344" stroke="#3A3D45" stroke-width="2"/>
+<text x="341.0" y="1332.0" font-size="28" text-anchor="middle" fill="#1F2128">Contratos_Opciones</text>
+<text x="67" y="1376.65" font-size="28" fill="#1F2128">ID_Contrato</text>
+<text x="610" y="1376.65" font-size="28" text-anchor="end" fill="#1F2128">PK/FK</text>
+<text x="67" y="1421.95" font-size="28" fill="#1F2128">ID_Opcion</text>
+<text x="610" y="1421.95" font-size="28" text-anchor="end" fill="#1F2128">PK/FK</text>
+<text x="67" y="1467.25" font-size="28" fill="#1F2128">Precio_Acordado</text>
+<text x="610" y="1467.25" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<clipPath id="c601540"><rect x="60" y="1540" width="562" height="315.79999999999995" rx="10"/></clipPath>
+<g clip-path="url(#c601540)">
+<rect x="60" y="1540" width="562" height="315.79999999999995" fill="#FFFFFF"/>
+<rect x="60" y="1540" width="562" height="44" fill="#FE7070"/>
+</g>
+<rect x="60" y="1540" width="562" height="315.79999999999995" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="60" y1="1584" x2="622" y2="1584" stroke="#3A3D45" stroke-width="2"/>
+<text x="341.0" y="1572.0" font-size="28" text-anchor="middle" fill="#1F2128">Opciones</text>
+<text x="67" y="1616.65" font-size="28" fill="#1F2128">ID_Opcion</text>
+<text x="610" y="1616.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="67" y="1661.95" font-size="28" fill="#1F2128">Nombre</text>
+<text x="610" y="1661.95" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(120)</text>
+<text x="67" y="1707.25" font-size="28" fill="#1F2128">Descripcion</text>
+<text x="610" y="1707.25" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(300)</text>
+<text x="67" y="1752.5500000000002" font-size="28" fill="#1F2128">Precio_Adicional</text>
+<text x="610" y="1752.5500000000002" font-size="28" text-anchor="end" fill="#1F2128">decimal(18,2)</text>
+<text x="67" y="1797.8500000000001" font-size="28" fill="#1F2128">Activa</text>
+<text x="610" y="1797.8500000000001" font-size="28" text-anchor="end" fill="#1F2128">bit</text>
+<text x="67" y="1843.15" font-size="28" fill="#1F2128">ID_Categoria</text>
+<text x="610" y="1843.15" font-size="28" text-anchor="end" fill="#1F2128">FK</text>
+<clipPath id="c601915"><rect x="60" y="1915" width="562" height="225.2" rx="10"/></clipPath>
+<g clip-path="url(#c601915)">
+<rect x="60" y="1915" width="562" height="225.2" fill="#FFFFFF"/>
+<rect x="60" y="1915" width="562" height="44" fill="#FE7070"/>
+</g>
+<rect x="60" y="1915" width="562" height="225.2" rx="10" fill="none" stroke="#3A3D45" stroke-width="2"/>
+<line x1="60" y1="1959" x2="622" y2="1959" stroke="#3A3D45" stroke-width="2"/>
+<text x="341.0" y="1947.0" font-size="28" text-anchor="middle" fill="#1F2128">Categorias_Opciones</text>
+<text x="67" y="1991.65" font-size="28" fill="#1F2128">ID_Categoria</text>
+<text x="610" y="1991.65" font-size="28" text-anchor="end" fill="#1F2128">PK</text>
+<text x="67" y="2036.95" font-size="28" fill="#1F2128">Nombre</text>
+<text x="610" y="2036.95" font-size="28" text-anchor="end" fill="#1F2128">nvarchar(100)</text>
+<text x="67" y="2082.25" font-size="28" fill="#1F2128">Es_Multiple</text>
+<text x="610" y="2082.25" font-size="28" text-anchor="end" fill="#1F2128">bit</text>
+<text x="67" y="2127.55" font-size="28" fill="#1F2128">Orden</text>
+<text x="610" y="2127.55" font-size="28" text-anchor="end" fill="#1F2128">int</text>
+<rect x="64" y="72" width="258" height="418" rx="10" fill="#FFFFFF" stroke="#E3E3E6" stroke-width="2"/>
+<text x="98" y="118" font-size="19" font-weight="700" fill="#1F2128">Referencias del</text>
+<text x="98" y="144" font-size="19" font-weight="700" fill="#1F2128">diagrama</text>
+<circle cx="110" cy="168" r="13" fill="#9391FF" stroke="#D8D8DC" stroke-width="1"/>
+<text x="137" y="175" font-size="19" fill="#1F2128">Roles de</text>
+<text x="137" y="201" font-size="19" fill="#1F2128">Usuario</text>
+<text x="137" y="227" font-size="19" fill="#1F2128">(Identity)</text>
+<circle cx="110" cy="252" r="13" fill="#FE7070" stroke="#D8D8DC" stroke-width="1"/>
+<text x="137" y="259" font-size="19" fill="#1F2128">Catálogo del</text>
+<text x="137" y="285" font-size="19" fill="#1F2128">Salón</text>
+<circle cx="110" cy="310" r="13" fill="#FFF7A1" stroke="#D8D8DC" stroke-width="1"/>
+<text x="137" y="317" font-size="19" fill="#1F2128">Contratación,</text>
+<text x="137" y="343" font-size="19" fill="#1F2128">Clientes y</text>
+<text x="137" y="369" font-size="19" fill="#1F2128">Cobros</text>
+<circle cx="110" cy="393" r="13" fill="#F4D9FF" stroke="#D8D8DC" stroke-width="1"/>
+<text x="137" y="400" font-size="19" fill="#1F2128">Logística Interna</text>
+<circle cx="110" cy="428" r="13" fill="#00C2A8" stroke="#D8D8DC" stroke-width="1"/>
+<text x="137" y="435" font-size="19" fill="#1F2128">Control y</text>
+<text x="137" y="461" font-size="19" fill="#1F2128">Seguridad</text>
+<metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTplYmQyNWIyYi1lMWQ4LTQyNDEtOWUyOS05ZGZhMjlmNDhjMjAAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaCqYKBxnnED91RsKMNthfjAAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo2YjFiNDRmNC0wNTJjLTRlMTUtYWZmNi00NTQ4Yzc4ZmEzZGZscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNowKD7gdMdDN/T0bIRloJrIQAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggLvO+ibSQr4Fh/274X6fVaRDINXkqFW28+yXD8fJJ3vKkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaBo1eIsUx/9SA/rYANjxMQIAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIL+wk1oicolZ9Fr/Qx86rqR9Oe0W2jHvWQ1eHwHFWyvEZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GXGHZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOmViZDI1YjJiLWUxZDgtNDI0MS05ZTI5LTlkZmEyOWY0OGMyMC9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmE4MTVkODRiLTc0YjEtNDkxNi1iMTIyLTE2NjkyMTczYWQ1NHJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCAu876JtJCvgWH/bvhfp9VpEMg1eSoVbbz7JcPx8kne8qJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggLTNuPulZ58y6bcpOrfmHC80Mm3ySwLEQHtA5kwML6GKiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggk3Bzap5hDxb0p72hsL6oeAD/4vaMJ5DlunJwLAq5fpp0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQEMdagLaoENr/YHe7sttmKWxYCNBKpxAOUR8iSZ0XkpDlM+OVN6tsFSfH0eBgs0KEasq38VvwpWvZfUgLH/2mZc=</c2pa:manifest></metadata></svg>
