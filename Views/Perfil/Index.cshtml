@@ -1,0 +1,74 @@
+﻿@model PerfilVM
+@{
+    ViewData["Title"] = "Mi perfil";
+}
+<h2>Mi perfil</h2>
+<p>Sesión iniciada como <b>@Model.Email</b> (@Model.Rol).</p>
+
+@if (Model.EsCliente)
+{
+    <section class="ficha">
+        <h3>Mis datos</h3>
+        <form asp-action="Datos" method="post" class="col-md-6">
+            <div class="mb-3">
+                <label asp-for="Datos.RazonSocialApellido" class="form-label"></label>
+                <input asp-for="Datos.RazonSocialApellido" class="form-control" />
+                <span asp-validation-for="Datos.RazonSocialApellido" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Datos.DomicilioLegal" class="form-label"></label>
+                <input asp-for="Datos.DomicilioLegal" class="form-control" />
+                <span asp-validation-for="Datos.DomicilioLegal" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Datos.Telefono" class="form-label"></label>
+                <input asp-for="Datos.Telefono" class="form-control" />
+                <span asp-validation-for="Datos.Telefono" class="text-danger"></span>
+            </div>
+            <button class="btn btn-success">Guardar datos</button>
+        </form>
+    </section>
+}
+
+<section class="ficha">
+    <h3>Cambiar contraseña</h3>
+    <form asp-action="Clave" method="post" class="col-md-6">
+        <div class="mb-3">
+            <label asp-for="Clave.ClaveActual" class="form-label"></label>
+            <input asp-for="Clave.ClaveActual" class="form-control" autocomplete="current-password" />
+            <span asp-validation-for="Clave.ClaveActual" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Clave.ClaveNueva" class="form-label"></label>
+            <input asp-for="Clave.ClaveNueva" class="form-control" autocomplete="new-password" />
+            <span asp-validation-for="Clave.ClaveNueva" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Clave.ConfirmarClave" class="form-label"></label>
+            <input asp-for="Clave.ConfirmarClave" class="form-control" autocomplete="new-password" />
+            <span asp-validation-for="Clave.ConfirmarClave" class="text-danger"></span>
+        </div>
+        <button class="btn btn-success">Cambiar contraseña</button>
+    </form>
+</section>
+
+<section class="ficha">
+    <h3>Cambiar correo</h3>
+    <form asp-action="Correo" method="post" class="col-md-6">
+        <div class="mb-3">
+            <label asp-for="Correo.NuevoCorreo" class="form-label"></label>
+            <input asp-for="Correo.NuevoCorreo" class="form-control" autocomplete="email" />
+            <span asp-validation-for="Correo.NuevoCorreo" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Correo.ClaveActual" class="form-label"></label>
+            <input asp-for="Correo.ClaveActual" class="form-control" autocomplete="current-password" />
+            <span asp-validation-for="Correo.ClaveActual" class="text-danger"></span>
+        </div>
+        <button class="btn btn-success">Cambiar correo</button>
+    </form>
+</section>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+ }

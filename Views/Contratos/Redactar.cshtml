@@ -1,0 +1,36 @@
+﻿@model RedactarVM
+@{
+    ViewData["Title"] = "Redactar contrato";
+    var firmado = (bool)ViewData["Firmado"]!;
+}
+<a class="volver" asp-action="Detalle" asp-route-id="@Model.IdContrato">← Volver al contrato</a>
+<h2>Contrato de @ViewData["Cliente"]</h2>
+
+@if (firmado)
+{
+    <div class="aviso"><b>Contrato firmado.</b> No se puede modificar. @ViewData["FirmaInfo"]</div>
+}
+else
+{
+    <p>Estado: <b>@((bool)ViewData["Enviado"]! ? "Enviado al cliente (esperando su firma)" : "Borrador (el cliente todavía no lo ve)")</b></p>
+}
+
+<form asp-action="Redactar" method="post">
+    <input type="hidden" asp-for="IdContrato" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <textarea asp-for="Texto" rows="28" class="form-control texto-contrato" readonly="@firmado"></textarea>
+    <span asp-validation-for="Texto" class="text-danger"></span>
+
+    @if (!firmado)
+    {
+        <p class="form-text mt-2">Separá los párrafos con una línea en blanco. Los títulos de cláusula (PRIMERA: Objeto.) salen en negrita en el PDF.</p>
+        <button name="accion" value="borrador" class="btn btn-outline-dark">Guardar borrador</button>
+        <button name="accion" value="enviar" class="btn btn-success">Guardar y enviar al cliente</button>
+        <a asp-action="Redactar" asp-route-id="@Model.IdContrato" asp-route-plantilla="true" class="btn btn-link">Volver a la plantilla</a>
+    }
+    <a asp-controller="Archivos" asp-action="Contrato" asp-route-id="@Model.IdContrato" class="btn btn-link">Descargar PDF</a>
+    <a asp-action="Detalle" asp-route-id="@Model.IdContrato" class="btn btn-link">Volver</a>
+</form>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+ }

@@ -1,0 +1,44 @@
+﻿@model ResenaVM
+@{
+    var c = (Contrato)ViewData["Contrato"]!;
+    var existe = (bool)ViewData["Existe"]!;
+    ViewData["Title"] = existe ? "Editar mi opinión" : "Contanos tu experiencia";
+}
+
+<a class="volver" asp-action="Mias">← Volver a mis opiniones</a>
+
+<div class="resena-form">
+    <h1>@ViewData["Title"]</h1>
+    <p class="detalle-lead">@c.Paquete.Nombre · evento del @c.FechaEvento.ToString("dd/MM/yyyy")</p>
+
+    <form asp-action="Opinar" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="IdContrato" />
+
+        <fieldset class="mb-4">
+            <legend class="form-label">¿Cómo calificarías tu evento?</legend>
+            <div class="estrellas-input">
+                @for (var i = 5; i >= 1; i--)
+                {
+                    <input type="radio" asp-for="Puntaje" value="@i" id="estrella@(i)" />
+                    <label for="estrella@(i)" title="@i de 5">★</label>
+                }
+            </div>
+            <span asp-validation-for="Puntaje" class="text-danger d-block"></span>
+        </fieldset>
+
+        <div class="mb-4">
+            <label asp-for="Comentario" class="form-label"></label>
+            <textarea asp-for="Comentario" class="form-control" rows="5" maxlength="800"
+                      placeholder="¿Qué fue lo que más te gustó? ¿Lo recomendarías?"></textarea>
+            <span asp-validation-for="Comentario" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">@(existe ? "Guardar cambios" : "Publicar mi opinión")</button>
+        <a class="btn btn-outline-dark" asp-action="Mias">Cancelar</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

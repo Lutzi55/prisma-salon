@@ -1,0 +1,79 @@
+﻿@model PagoVM
+@{
+    var c = (Contrato)ViewData["Contrato"]!;
+    ViewData["Title"] = "Informar un pago";
+    var es = new System.Globalization.CultureInfo("es-AR");
+    var hoy = Reloj.Ahora().Date;
+}
+<a class="volver" asp-action="Index">← Volver a mis contratos</a>
+<h2>Informar un pago</h2>
+<p class="crud-descripcion">
+    @c.Paquete.Nombre, evento del @c.FechaEvento.ToString("dd/MM/yyyy").
+    Usalo si transferiste o pagaste con débito sin que el salón te haya enviado el recibo.
+    Podés informar hasta <b>$ @c.PorSolicitar.ToString("N0", es)</b>. El salón revisa cada comprobante antes de confirmarlo.
+    Para pagar en efectivo o cheque, esperá el recibo del salón y pedí un turno desde ahí.
+</p>
+
+<form asp-action="SubirPago" method="post" enctype="multipart/form-data" class="col-lg-8">
+    <input type="hidden" asp-for="IdContrato" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="bloque">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Monto" class="form-label"></label>
+                <input asp-for="Monto" type="number" step="0.01" class="form-control" id="montoPago" />
+                <span asp-validation-for="Monto" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="FechaPago" class="form-label"></label>
+                <input asp-for="FechaPago" class="form-control" max="@hoy.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="col-md-6">
+                <label asp-for="MetodoPago" class="form-label"></label>
+                <select asp-for="MetodoPago" class="form-select">
+                    <option value="">Seleccioná...</option>
+                    @foreach (var m in PoliticaPagos.MediosConComprobante)
+                    {
+                        <option>@m</option>
+                    }
+                </select>
+                <span asp-validation-for="MetodoPago" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Concepto" class="form-label"></label>
+                <input asp-for="Concepto" class="form-control" placeholder="Ej: Seña, cuota 2" />
+            </div>
+            <div class="col-12">
+                <label asp-for="Comprobante" class="form-label">Comprobante (JPG o PNG, hasta 3 MB)</label>
+                <input asp-for="Comprobante" type="file" accept="image/png,image/jpeg" class="form-control" id="archivoComprobante" />
+                <span asp-validation-for="Comprobante" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="generar-prueba">
+            <button type="button" class="btn btn-outline-dark btn-sm" id="btnGenerar">Generar comprobante de prueba</button>
+            <small>Para la demo: arma una imagen con el monto que pusiste y la marca «Simulación».</small>
+        </div>
+        <img id="vistaComprobante" class="vista-comprobante" alt="Vista previa del comprobante" hidden />
+    </div>
+    <button class="btn btn-primary">Enviar comprobante</button>
+    <a asp-action="Index" class="btn btn-link">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/comprobante.js" asp-append-version="true"></script>
+    <script>
+        document.getElementById('btnGenerar').addEventListener('click', () => {
+            const metodo = document.getElementById('MetodoPago').value || 'Transferencia';
+            ComprobantePrueba.generar({
+                monto: parseFloat(document.getElementById('montoPago').value),
+                metodo: metodo,
+                pagador: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(c.Cliente?.RazonSocialApellido ?? "Cliente")),
+                concepto: document.getElementById('Concepto').value || 'Pago informado por el cliente',
+                fecha: document.getElementById('FechaPago').value,
+                input: document.getElementById('archivoComprobante'),
+                preview: document.getElementById('vistaComprobante')
+            });
+        });
+    </script>
+}

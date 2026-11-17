@@ -1,0 +1,15 @@
+﻿@model Contrato
+@{
+    // Barra de pasos: Pedido y seña → Contrato → Firma → Pago → Listo
+    var actual = EtapaContrato.Indice(Model);
+}
+<ol class="etapas" aria-label="Avance del contrato">
+    @for (var i = 0; i < EtapaContrato.Pasos.Length; i++)
+    {
+        var estado = i < actual ? "hecho" : i == actual ? "actual" : "pendiente";
+        <li class="etapa etapa-@estado" aria-current="@(i == actual ? "step" : null)">
+            <span class="etapa-punto">@(i < actual ? "✓" : (i + 1).ToString())</span>
+            <span class="etapa-nombre">@EtapaContrato.Pasos[i]</span>
+        </li>
+    }
+</ol>

@@ -1,0 +1,91 @@
+﻿@model Contrato
+@{
+    ViewData["Title"] = "Pagos";
+}
+<h2>Pagos del contrato</h2>
+<p>@Model.Cliente.RazonSocialApellido, evento del @Model.FechaEvento.ToString("dd/MM/yyyy")</p>
+
+<div class="cifras">
+    <div><small>Acordado</small><b>@Model.ValorRealAcordado.ToString("N2")</b></div>
+    <div><small>Confirmado</small><b>@Model.Pagado.ToString("N2")</b></div>
+    <div><small>En revisión</small><b>@Model.EnRevision.ToString("N2")</b></div>
+    <div><small>Para pagar (cliente)</small><b>@Model.Solicitado.ToString("N2")</b></div>
+    <div><small>Por solicitar</small><b>@Model.PorSolicitar.ToString("N2")</b></div>
+    @if (Model.Reembolsado > 0)
+    {
+        <div><small>Reembolsado</small><b>@Model.Reembolsado.ToString("N2")</b></div>
+    }
+</div>
+
+<div class="mb-3">
+    @if (Model.PorSolicitar > 0)
+    {
+        <a asp-action="Solicitar" asp-route-idContrato="@Model.IdContrato" class="btn btn-primary">Solicitar pago al cliente</a>
+    }
+    @if (Model.Saldo - Model.EnRevision > 0)
+    {
+        <a asp-action="Create" asp-route-idContrato="@Model.IdContrato" class="btn btn-outline-dark">Registrar pago recibido</a>
+    }
+    <a asp-controller="Contratos" asp-action="Index" class="btn btn-link">Volver a contratos</a>
+</div>
+
+<div class="table-responsive">
+    <table class="table align-middle">
+        <thead><tr><th>Fecha</th><th>Concepto</th><th>Monto</th><th>Método</th><th>Estado</th><th>Comprobante</th><th></th></tr></thead>
+        <tbody>
+            @foreach (var p in Model.Pagos.OrderByDescending(p => p.FechaPago))
+            {
+                var abierto = EstadoPago.AdmiteComprobante(p.Estado);
+                <tr>
+                    <td>@(abierto && p.FechaVencimiento != null ? "Vence " + p.FechaVencimiento.Value.ToString("dd/MM/yyyy") : p.FechaPago.ToString("dd/MM/yyyy"))</td>
+                    <td>@p.Concepto</td>
+                    <td>@p.Monto.ToString("N2")</td>
+                    <td>@(abierto ? "-" : p.MetodoPago)</td>
+                    <td>
+                        <span class="estado estado-@p.Estado">@EstadoPago.Etiqueta(p.Estado)</span>
+                        @if (!string.IsNullOrEmpty(p.Nota))
+                        {
+                            <div class="nota-pago">@p.Nota</div>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(p.RutaComprobanteImg))
+                        {
+                            <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" data-ver-comprobante>Ver</a>
+                            <span> · </span>
+                            <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" asp-route-pdf="true">PDF</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sin comprobante</span>
+                        }
+                    </td>
+                    <td class="text-end text-nowrap">
+                        @if (p.Estado == "Pendiente")
+                        {
+                            <form asp-action="Confirmar" asp-route-id="@p.IdPago" method="post" class="d-inline">
+                                <button class="btn btn-sm btn-success">Confirmar</button>
+                            </form>
+                            <a asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="rechazar" class="btn btn-sm btn-outline-danger">Rechazar</a>
+                        }
+                        else if (abierto)
+                        {
+                            <a asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="reprogramar" class="btn btn-sm btn-outline-dark">Reprogramar</a>
+                            <a asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="cancelar" class="btn btn-sm btn-outline-danger">Cancelar</a>
+                        }
+                        else if (p.Estado == "Confirmado")
+                        {
+                            <a asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="reembolsar" class="btn btn-sm btn-outline-dark">Reembolsar</a>
+                        }
+                        else if (p.Estado == "Cancelado")
+                        {
+                            <form asp-action="Delete" asp-route-id="@p.IdPago" method="post" class="d-inline form-eliminar">
+                                <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

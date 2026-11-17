@@ -1,0 +1,230 @@
+﻿@model List<PaqueteEvento>
+@{
+    ViewData["Title"] = "Inicio";
+    ViewData["Completo"] = true;
+    var logueado = User.Identity?.IsAuthenticated == true;
+    var esAdmin = User.IsInRole("Administrador");
+    var esCliente = User.IsInRole("Cliente");
+    var resenas = ViewData["Resenas"] as List<Resena> ?? new List<Resena>();
+    var cantResenas = ViewData["CantResenas"] as int? ?? 0;
+    var promedio = ViewData["Promedio"] as double? ?? 0;
+    var fotos = ViewData["FotosSalon"] as List<string> ?? new List<string>();
+    var capacidad = ViewData["CapacidadMaxima"] as int? ?? 0;
+    var es = new System.Globalization.CultureInfo("es-AR");
+    var hoy = DateTime.Today.ToString("yyyy-MM-dd");
+}
+
+<section class="hero">
+    <div class="contenedor hero-fila">
+        <div class="hero-texto">
+            <h1>
+                <span class="hl">Tu celebración,</span>
+                <span class="hl">coordinada de principio a fin</span>
+            </h1>
+            <p class="hero-bajada">Elegís el paquete y la fecha. Nosotros nos ocupamos del contrato, los shows, el personal y los pagos.</p>
+            <div class="hero-acciones">
+                <a href="#paquetes" class="btn btn-claro">Ver paquetes</a>
+                <a href="#proceso" class="enlace">Cómo trabajamos</a>
+            </div>
+
+            @* La consulta de fecha va al asistente: el admin ya ve todo en el Calendario *@
+            @if (!esAdmin)
+            {
+                <form class="hero-fecha" id="consultaFecha" novalidate>
+                    <label for="fechaConsulta">¿Ya tenés fecha? Consultá si está libre</label>
+                    <div class="hero-fecha-fila">
+                        <input type="date" id="fechaConsulta" min="@hoy" required />
+                        <button type="submit" class="btn btn-claro btn-sm">Consultar</button>
+                    </div>
+                </form>
+            }
+        </div>
+
+        <div class="hero-arco">
+            <span class="hero-rayo" aria-hidden="true"></span>
+            <div class="foto foto-arco">
+            <img src="~/img/hero.jpg" alt="Salón preparado para un evento" onerror="this.style.display='none'" />
+            <svg class="hero-luz" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <line x1="0" y1="58" x2="100" y2="30" pathLength="1" />
+                <line x1="0" y1="58" x2="100" y2="47" pathLength="1" />
+                <line x1="0" y1="58" x2="100" y2="64" pathLength="1" />
+            </svg>
+            <span class="hero-brillo" aria-hidden="true"></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="seccion" id="paquetes">
+    <div class="contenedor">
+        <div class="seccion-cab">
+            <h2>Paquetes</h2>
+            <p>Cada paquete incluye un coordinador asignado a tu fecha.</p>
+        </div>
+        <div class="lista-paquetes">
+            @foreach (var p in Model)
+            {
+                <article class="paquete">
+                    <a class="foto" asp-controller="Catalogo" asp-action="Detalle" asp-route-id="@p.IdPaquete" tabindex="-1" aria-hidden="true">
+                        <img src="~/img/paquete@(p.IdPaquete).jpg" alt="" onerror="this.style.display='none'" />
+                    </a>
+                    <div>
+                        <h3><a asp-controller="Catalogo" asp-action="Detalle" asp-route-id="@p.IdPaquete">@p.Nombre</a></h3>
+                        <p>@p.Descripcion</p>
+                        <div class="paquete-meta">
+                            @if (p.CapacidadInvitados > 0)
+                            {
+                                <span>Hasta @p.CapacidadInvitados invitados</span>
+                            }
+                            @if (logueado && p.DuracionHoras > 0)
+                            {
+                                <span>@p.DuracionHoras horas de evento</span>
+                            }
+                            <span>Reserva con seña del @PoliticaPagos.PorcentajeSena %</span>
+                        </div>
+                        <a class="enlace enlace-linea" asp-controller="Catalogo" asp-action="Detalle" asp-route-id="@p.IdPaquete">Ver qué incluye@(logueado ? " y personalizar" : "")</a>
+                    </div>
+                    <div class="paquete-precio">
+                        @if (logueado)
+                        {
+                            <small>Desde</small>
+                            @p.Precio.ToString("C0")
+                        }
+                        else
+                        {
+                            <small>Precio para clientes registrados</small>
+                            <a class="enlace" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/">Iniciá sesión</a>
+                        }
+                    </div>
+                </article>
+            }
+        </div>
+
+        @if (!Model.Any())
+        {
+            <p>Todavía no hay paquetes cargados.</p>
+        }
+    </div>
+</section>
+
+@if (fotos.Any())
+{
+    <section class="seccion seccion-salon" id="salon">
+        <div class="contenedor salon-fila">
+            <div class="salon-texto">
+                <h2>El salón</h2>
+                <p>Un mismo espacio que cambia con cada evento. Elegís la paleta de colores, la música, la iluminación y el mobiliario, y lo ambientamos para tu fecha.</p>
+                <ul class="salon-datos">
+                    @if (capacidad > 0)
+                    {
+                        <li><b>Hasta @capacidad invitados</b><span>Según el paquete que elijas.</span></li>
+                    }
+                    <li><b>Un coordinador para tu evento</b><span>Desde la firma del contrato hasta el cierre de la noche.</span></li>
+                    <li><b>Todo desde tu cuenta</b><span>Contrato, pagos y comprobantes en un solo lugar.</span></li>
+                </ul>
+            </div>
+            <div class="salon-fotos fotos-@fotos.Count">
+                @for (var i = 0; i < fotos.Count; i++)
+                {
+                    <div class="foto @(i == 0 ? "foto-arco-chica" : "")">
+                        <img src="@fotos[i]" alt="" loading="lazy" onerror="this.style.display='none'" />
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<section class="seccion seccion-claro" id="proceso">
+    <div class="contenedor">
+        <div class="seccion-cab">
+            <h2>Cómo trabajamos</h2>
+            <p>Un proceso simple, con todo registrado en un solo lugar.</p>
+        </div>
+        <div class="pasos" data-animar>
+            <div class="paso"><h3>Elegís paquete y fecha</h3><p>Te asignamos un coordinador para tu evento.</p></div>
+            <div class="paso"><h3>Firmamos el contrato</h3><p>Lo leés y lo firmás desde la web, sin papeles.</p></div>
+            <div class="paso"><h3>Pagás y registrás</h3><p>Cada pago queda con su comprobante.</p></div>
+            <div class="paso"><h3>Disfrutás tu evento</h3><p>Tu coordinador y el personal se ocupan de todo.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="seccion" id="experiencias">
+    <div class="contenedor">
+        <div class="seccion-cab">
+            <h2>Experiencias</h2>
+            @if (cantResenas > 0)
+            {
+                <p class="resumen-estrellas">
+                    <b>@promedio.ToString("0.0", es)</b> de 5 estrellas en @cantResenas @(cantResenas == 1 ? "opinión" : "opiniones") de clientes
+                </p>
+            }
+            else
+            {
+                <p>Lo que cuentan quienes ya celebraron con nosotros.</p>
+            }
+        </div>
+
+        @if (resenas.Any())
+        {
+            <div class="experiencias" data-animar>
+                @foreach (var r in resenas)
+                {
+                    <figure class="experiencia">
+                        <div class="estrellas" role="img" aria-label="@r.Puntaje de 5 estrellas">
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                <span class="@(i <= r.Puntaje ? "llena" : "vacia")">★</span>
+                            }
+                        </div>
+                        <blockquote>@r.Comentario</blockquote>
+                        @if (!string.IsNullOrEmpty(r.Respuesta))
+                        {
+                            <p class="respuesta-salon"><b>Respuesta del salón:</b> @r.Respuesta</p>
+                        }
+                        <figcaption>
+                            <b>@r.Cliente.RazonSocialApellido</b>
+                            <span>@r.Contrato.Paquete.Nombre, @r.Contrato.FechaEvento.ToString("MMMM 'de' yyyy", es)</span>
+                        </figcaption>
+                    </figure>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="vacio">Pronto vas a ver acá las opiniones de nuestros clientes.</p>
+        }
+    </div>
+</section>
+
+@if (!esAdmin)
+{
+    <section class="cierre">
+        <div class="contenedor cierre-fila">
+            <div>
+                <h2>¿Empezamos a planear tu evento?</h2>
+                @if (esCliente)
+                {
+                    <p>Seguí tu contrato y tus pagos desde tu cuenta, o consultá al asistente lo que necesites.</p>
+                }
+                else
+                {
+                    <p>Creá tu cuenta para ver precios y personalizar tu paquete, o preguntale al asistente por tu fecha.</p>
+                }
+            </div>
+            <div class="cierre-acciones">
+                @if (esCliente)
+                {
+                    <a class="btn btn-claro" asp-controller="MisContratos" asp-action="Index">Ver mis contratos</a>
+                }
+                else if (!logueado)
+                {
+                    <a class="btn btn-claro" asp-area="Identity" asp-page="/Account/Register">Crear mi cuenta</a>
+                }
+                <button type="button" class="btn btn-borde-claro" data-abrir-chat>Hablar con el asistente</button>
+            </div>
+        </div>
+        <div class="cierre-marca" aria-hidden="true"><partial name="_Logo" /></div>
+    </section>
+}

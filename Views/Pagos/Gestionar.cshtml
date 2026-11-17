@@ -1,0 +1,47 @@
+﻿@model GestionVM
+@{
+    var p = (Pago)ViewData["Pago"]!;
+    var (titulo, boton, ayuda) = Model.Accion switch
+    {
+        "reprogramar" => ("Reprogramar vencimiento", "Reprogramar", "El cliente verá el nuevo vencimiento y podrá enviar su comprobante."),
+        "cancelar" => ("Cancelar solicitud", "Cancelar solicitud", "La solicitud deja de contar para el contrato y el cliente verá el motivo."),
+        "rechazar" => ("Rechazar comprobante", "Rechazar comprobante", "El cliente verá el motivo y podrá enviar otro comprobante."),
+        _ => ("Registrar reembolso", "Registrar reembolso", "El monto vuelve al saldo del contrato. Registralo solo si ya devolviste el dinero.")
+    };
+    ViewData["Title"] = titulo;
+}
+<h2>@titulo</h2>
+<p>
+    @p.Contrato.Cliente.RazonSocialApellido, evento del @p.Contrato.FechaEvento.ToString("dd/MM/yyyy")<br />
+    Pago de <b>@p.Monto.ToString("N2")</b> (@p.Concepto). Estado actual: <span class="estado estado-@p.Estado">@EstadoPago.Etiqueta(p.Estado)</span>
+</p>
+<p>@ayuda</p>
+@if (Model.Accion == "rechazar" && !string.IsNullOrEmpty(p.RutaComprobanteImg))
+{
+    <p><a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" data-ver-comprobante>Ver el comprobante enviado</a></p>
+}
+
+<form asp-action="Gestionar" method="post" class="col-md-6">
+    <input type="hidden" asp-for="IdPago" />
+    <input type="hidden" asp-for="Accion" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @if (Model.Accion == "reprogramar")
+    {
+        <div class="mb-3">
+            <label asp-for="NuevoVencimiento" class="form-label"></label>
+            <input asp-for="NuevoVencimiento" class="form-control" />
+            <span asp-validation-for="NuevoVencimiento" class="text-danger"></span>
+        </div>
+    }
+    <div class="mb-4">
+        <label asp-for="Nota" class="form-label">@(Model.Accion == "reprogramar" ? "Motivo (opcional)" : "Motivo (lo ve el cliente)")</label>
+        <textarea asp-for="Nota" rows="3" class="form-control"></textarea>
+        <span asp-validation-for="Nota" class="text-danger"></span>
+    </div>
+    <button class="btn @(Model.Accion == "reprogramar" ? "btn-success" : "btn-outline-danger")">@boton</button>
+    <a asp-action="Index" asp-route-idContrato="@p.IdContrato" class="btn btn-link">Volver</a>
+</form>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+ }

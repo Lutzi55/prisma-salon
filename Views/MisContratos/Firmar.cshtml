@@ -1,0 +1,80 @@
+﻿@model FirmarVM
+@{
+    var c = (Contrato)ViewData["Contrato"]!;
+    ViewData["Title"] = "Firmar contrato";
+    var parrafos = c.TextoContrato!.Replace("\r", "")
+        .Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+}
+<h2>Firmar contrato</h2>
+<p>@c.Paquete.Nombre, evento del @c.FechaEvento.ToString("dd/MM/yyyy"). Leé el contrato completo antes de firmar.</p>
+
+<div class="contrato-lectura">
+    @foreach (var par in parrafos)
+    {
+        <p>@par</p>
+    }
+</div>
+
+<form asp-action="Firmar" method="post" id="formFirma" class="col-lg-8">
+    <input type="hidden" asp-for="IdContrato" />
+    <input type="hidden" asp-for="FirmaPng" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" autocomplete="name" />
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+
+    <div class="mb-2">
+        <label class="form-label">Tu firma (dibujala con el mouse o con el dedo)</label>
+        <canvas id="firma" class="firma-caja" width="600" height="200"></canvas>
+        <span asp-validation-for="FirmaPng" class="text-danger"></span>
+        <span id="avisoFirma" class="text-danger" hidden>Dibujá tu firma en el recuadro antes de continuar.</span>
+        <div><button type="button" id="borrarFirma" class="btn btn-sm btn-outline-dark mt-2">Borrar y empezar de nuevo</button></div>
+    </div>
+
+    <div class="form-check my-3">
+        <input asp-for="Acepto" class="form-check-input" />
+        <label asp-for="Acepto" class="form-check-label"></label>
+        <div><span asp-validation-for="Acepto" class="text-danger"></span></div>
+    </div>
+
+    <button class="btn btn-success">Firmar contrato</button>
+    <a asp-action="Index" class="btn btn-link">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const cv = document.getElementById('firma'), ctx = cv.getContext('2d');
+            const campo = document.getElementById('FirmaPng'), aviso = document.getElementById('avisoFirma');
+            let dibujando = false, hayTrazo = false;
+            ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#161616';
+
+            function pos(e) {
+                const r = cv.getBoundingClientRect();
+                return { x: (e.clientX - r.left) * cv.width / r.width, y: (e.clientY - r.top) * cv.height / r.height };
+            }
+            cv.addEventListener('pointerdown', e => {
+                dibujando = true; cv.setPointerCapture(e.pointerId);
+                const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + 0.1, p.y + 0.1); ctx.stroke();
+                hayTrazo = true; aviso.hidden = true; e.preventDefault();
+            });
+            cv.addEventListener('pointermove', e => {
+                if (!dibujando) return;
+                const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke();
+            });
+            ['pointerup', 'pointercancel'].forEach(t => cv.addEventListener(t, () => dibujando = false));
+
+            document.getElementById('borrarFirma').addEventListener('click', () => {
+                ctx.clearRect(0, 0, cv.width, cv.height); hayTrazo = false; campo.value = '';
+            });
+            document.getElementById('formFirma').addEventListener('submit', e => {
+                if (!hayTrazo) { e.preventDefault(); aviso.hidden = false; return; }
+                campo.value = cv.toDataURL('image/png');
+            });
+        })();
+    </script>
+}

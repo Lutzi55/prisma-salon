@@ -1,0 +1,52 @@
+# ASP.NET Core
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.userprefs
+*.suo
+.user/
+_scc/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userprefs
+
+# NuGet
+**/bin/
+**/obj/
+*.nupkg
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+
+App_Data/
+
+# Visual Studio Code
+.vscode/
+
+# Publicación
+PublishProfiles/
+*.pubxml
+*.pubxml.user
+*.publishsettings
+publish/
+
+# Secretos: NUNCA al repositorio
+appsettings.Production.json
+appsettings.*.local.json
+secrets.json
+*.env
+
+# Copias de respaldo locales
+_respaldo*/
+

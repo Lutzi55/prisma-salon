@@ -1,0 +1,168 @@
+﻿@model EnviarComprobanteVM
+@{
+    var p = (Pago)ViewData["Pago"]!;
+    var medios = (string[])ViewData["Medios"]!;
+    var pagador = (string)ViewData["Pagador"]!;
+    var reserva = (bool)ViewData["Reserva"]!;
+    var totalRestante = (decimal)ViewData["TotalRestante"]!;
+    var es = new System.Globalization.CultureInfo("es-AR");
+    var inv = System.Globalization.CultureInfo.InvariantCulture;
+    ViewData["Title"] = "Pagar";
+    var hoy = Reloj.Ahora().Date;
+}
+<a class="volver" asp-action="Index">← Volver a mis contratos</a>
+<h2>@(p.EsSena ? "Confirmá tu seña" : "Confirmá tu pago")</h2>
+<p class="crud-descripcion">
+    Evento del @p.Contrato.FechaEvento.ToString("dd/MM/yyyy").
+    @if (p.FechaVencimiento != null) { <span>Tenés tiempo hasta el @p.FechaVencimiento.Value.ToString("dd/MM/yyyy").</span> }
+    @if (reserva) { <span>La fecha queda reservada cuando el salón confirma este pago.</span> }
+</p>
+
+<dl class="resumen-pago" aria-live="polite">
+    <div><dt>Monto</dt><dd id="resMonto">$ @p.Monto.ToString("N0", es)</dd></div>
+    <div><dt>Tipo de pago</dt><dd id="resTipo">@(p.EsSena ? $"Seña del {PoliticaPagos.PorcentajeSena} %" : p.Concepto)</dd></div>
+    <div><dt>Medio</dt><dd id="resMedio">@Model.MetodoPago</dd></div>
+</dl>
+
+@if (reserva)
+{
+    <div class="aviso aviso-sena">Para reservar se paga solo por <b>transferencia o tarjeta de débito</b>.</div>
+}
+@if (!string.IsNullOrEmpty(p.Nota))
+{
+    <div class="aviso"><b>Nota del salón:</b> @p.Nota</div>
+}
+@if (p.TurnoPago != null)
+{
+    <div class="aviso">Ya tenés turno el <b>@p.TurnoPago.Value.ToString("dddd d/MM 'a las' HH:mm", es)</b> para pagar en @p.MetodoPago.ToLower(). Si querés, podés cambiarlo o pagar de otra forma.</div>
+}
+
+<form asp-action="PagarSolicitud" method="post" enctype="multipart/form-data" class="col-lg-8" id="formPago">
+    <input type="hidden" asp-for="IdPago" />
+    <input type="hidden" asp-for="Confirmar" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    @if (p.EsSena && totalRestante > p.Monto)
+    {
+        <fieldset class="bloque">
+            <legend>¿Cuánto pagás?</legend>
+            <div class="medios-elegir">
+                <label class="medio-opcion">
+                    <input type="radio" name="PagarTodo" value="false" checked="@(!Model.PagarTodo)" />
+                    <span><b>Solo la seña</b><small>$ @p.Monto.ToString("N0", es)</small></span>
+                </label>
+                <label class="medio-opcion">
+                    <input type="radio" name="PagarTodo" value="true" checked="@Model.PagarTodo" />
+                    <span><b>Todo de una</b><small>$ @totalRestante.ToString("N0", es)</small></span>
+                </label>
+            </div>
+        </fieldset>
+    }
+
+    <fieldset class="bloque">
+        <legend>¿Con qué medio?</legend>
+        <div class="medios-elegir">
+            @foreach (var m in medios)
+            {
+                var enPersona = PoliticaPagos.EsEnPersona(m);
+                <label class="medio-opcion">
+                    <input type="radio" name="MetodoPago" value="@m" checked="@(Model.MetodoPago == m)" data-en-persona="@(enPersona ? "1" : "0")" />
+                    <span><b>@m</b><small>@(enPersona ? "Con turno en el salón" : "Subís el comprobante")</small></span>
+                </label>
+            }
+        </div>
+        <span asp-validation-for="MetodoPago" class="text-danger"></span>
+    </fieldset>
+
+    <fieldset class="bloque" id="bloqueComprobante">
+        <legend>Comprobante</legend>
+        <p class="form-text mt-0">Transferí a <b>alias PRISMA.SALON.EVENTOS</b> (datos de simulación) y subí la captura o el ticket del débito.</p>
+        <div class="row g-3">
+            <div class="col-md-5">
+                <label asp-for="FechaPago" class="form-label"></label>
+                <input asp-for="FechaPago" class="form-control" max="@hoy.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="FechaPago" class="text-danger"></span>
+            </div>
+            <div class="col-md-7">
+                <label asp-for="Comprobante" class="form-label">Comprobante (JPG o PNG, hasta 3 MB)</label>
+                <input asp-for="Comprobante" type="file" accept="image/png,image/jpeg" class="form-control" id="archivoComprobante" />
+                <span asp-validation-for="Comprobante" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="generar-prueba">
+            <button type="button" class="btn btn-outline-dark btn-sm" id="btnGenerar">Generar comprobante de prueba</button>
+            <small>Para la demo: arma una imagen con el monto y la marca «Simulación», y la adjunta sola.</small>
+        </div>
+        <img id="vistaComprobante" class="vista-comprobante" alt="Vista previa del comprobante" hidden />
+    </fieldset>
+
+    <fieldset class="bloque" id="bloqueTurno" hidden>
+        <legend>Turno para pagar en el salón</legend>
+        <p class="form-text mt-0">Atendemos @PoliticaPagos.TextoHorario. Traé el efectivo o el cheque por $ @p.Monto.ToString("N0", es) y te damos el recibo en el momento.</p>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="TurnoFecha" class="form-label"></label>
+                <input asp-for="TurnoFecha" type="date" class="form-control" min="@hoy.ToString("yyyy-MM-dd")" />
+                <span asp-validation-for="TurnoFecha" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TurnoHora" class="form-label"></label>
+                <select asp-for="TurnoHora" class="form-select">
+                    <option value="">Elegí un horario...</option>
+                    @foreach (var h in PoliticaPagos.HorariosTurno())
+                    {
+                        <option value="@h">@h hs</option>
+                    }
+                </select>
+                <span asp-validation-for="TurnoHora" class="text-danger"></span>
+            </div>
+        </div>
+    </fieldset>
+
+    <button class="btn btn-primary" id="btnEnviar">Enviar comprobante</button>
+    <a asp-action="Index" class="btn btn-link">@(Model.Confirmar ? "Pagar más tarde" : "Cancelar")</a>
+</form>
+
+@section Scripts {
+    <script src="~/js/comprobante.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            const radios = document.querySelectorAll('input[name="MetodoPago"]');
+            const bloqueComp = document.getElementById('bloqueComprobante');
+            const bloqueTurno = document.getElementById('bloqueTurno');
+            const enviar = document.getElementById('btnEnviar');
+
+            const montoSena = @p.Monto.ToString(inv), montoTodo = @totalRestante.ToString(inv);
+            const tipoOriginal = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(p.EsSena ? $"Seña del {PoliticaPagos.PorcentajeSena} %" : p.Concepto ?? "Pago"));
+            const pesos = n => '$ ' + Math.round(n).toLocaleString('es-AR');
+            const todo = () => (document.querySelector('input[name="PagarTodo"]:checked') || {}).value === 'true';
+            const monto = () => todo() ? montoTodo : montoSena;
+
+            function actualizar() {
+                const elegido = document.querySelector('input[name="MetodoPago"]:checked');
+                const enPersona = elegido && elegido.dataset.enPersona === '1';
+                bloqueComp.hidden = enPersona;
+                bloqueTurno.hidden = !enPersona;
+                enviar.textContent = enPersona ? 'Agendar turno' : 'Enviar comprobante';
+                document.getElementById('resMonto').textContent = pesos(monto());
+                document.getElementById('resTipo').textContent = todo() ? 'Todo de una' : tipoOriginal;
+                document.getElementById('resMedio').textContent = elegido ? elegido.value : '-';
+            }
+            document.getElementById('formPago').addEventListener('change', actualizar);
+            actualizar();
+
+            document.getElementById('btnGenerar').addEventListener('click', () => {
+                const elegido = document.querySelector('input[name="MetodoPago"]:checked');
+                ComprobantePrueba.generar({
+                    monto: monto(),
+                    metodo: elegido ? elegido.value : 'Transferencia',
+                    pagador: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(pagador)),
+                    concepto: todo() ? 'Pago total del evento' : @Html.Raw(System.Text.Json.JsonSerializer.Serialize(p.Concepto ?? "Pago de evento")),
+                    fecha: document.getElementById('FechaPago').value,
+                    input: document.getElementById('archivoComprobante'),
+                    preview: document.getElementById('vistaComprobante')
+                });
+            });
+        })();
+    </script>
+}

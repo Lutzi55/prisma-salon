@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+
+@model object
+@{
+    var cols = (List<(string N, string L)>)ViewData["ColsForm"]!;
+    var key = (string)ViewData["Key"]!;
+    var keyVal = Model.GetType().GetProperty(key)!.GetValue(Model);
+    ViewData["Title"] = (string)ViewData["Titulo"]!;
+}
+<h2>@ViewData["Titulo"]</h2>
+<form asp-action="@(Convert.ToInt32(keyVal) == 0 ? "Create" : "Edit")" method="post" class="col-md-6">
+    <input type="hidden" name="@key" value="@keyVal" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @foreach (var c in cols)
+    {
+        var tipo = Model.GetType().GetProperty(c.N)!.PropertyType;
+        if (tipo == typeof(bool))
+        {
+            <div class="mb-3 form-check">
+                @Html.CheckBox(c.N, new { @class = "form-check-input" })
+                <label class="form-check-label" for="@c.N">@c.L</label>
+            </div>
+            continue;
+        }
+        <div class="mb-3">
+            <label class="form-label" for="@c.N">@c.L</label>
+            @if (ViewData[c.N] is SelectList sl)
+            {
+                @Html.DropDownList(c.N, sl, "Seleccione...", new { @class = "form-select" })
+            }
+            else
+            {
+                @Html.Editor(c.N, new { htmlAttributes = new { @class = "form-control" } })
+            }
+            @Html.ValidationMessage(c.N, "", new { @class = "text-danger" })
+        </div>
+    }
+    <button class="btn btn-success">Guardar</button>
+    <a asp-action="Index" class="btn btn-link">Cancelar</a>
+</form>
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+ }

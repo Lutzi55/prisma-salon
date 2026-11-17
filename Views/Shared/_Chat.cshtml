@@ -1,0 +1,55 @@
+﻿@{
+    var logueado = User.Identity?.IsAuthenticated == true;
+    var esAdmin = User.IsInRole("Administrador");
+    var esCliente = User.IsInRole("Cliente");
+}
+<div id="chat" class="chat" data-url="@Url.Action("Preguntar", "Chat", new { area = "" })">
+    <section class="chat-panel" id="chatPanel" hidden aria-label="Asistente de Prisma Salón">
+        <header class="chat-cab">
+            <div>
+                <b>Asistente Prisma</b>
+                <small>Respuestas generadas con IA</small>
+            </div>
+            <button type="button" class="chat-cerrar" id="chatCerrar" aria-label="Cerrar el asistente">&times;</button>
+        </header>
+
+        <div class="chat-mensajes" id="chatMensajes" aria-live="polite">
+            <div class="msg bot">
+                ¡Hola! Soy el asistente de Prisma Salón. Te ayudo con paquetes, fechas disponibles y cómo contratar.
+                @if (!logueado)
+                {
+                    <text>Para ver precios y opciones de personalización, iniciá sesión.</text>
+                }
+            </div>
+        </div>
+
+        <div class="chat-sugerencias" id="chatSugerencias">
+            @if (esAdmin)
+            {
+                <button type="button">Haceme un resumen de la gestión</button>
+                <button type="button">¿Qué comprobantes tengo para revisar?</button>
+            }
+            else if (esCliente)
+            {
+                <button type="button">¿Cuánto me falta pagar?</button>
+                <button type="button">¿Qué opciones puedo agregar?</button>
+            }
+            else
+            {
+                <button type="button">¿Qué paquetes tienen?</button>
+                <button type="button">¿Cómo es el proceso para contratar?</button>
+            }
+            <button type="button">¿Qué fechas hay ocupadas en diciembre?</button>
+        </div>
+
+        <form class="chat-form" id="chatForm" autocomplete="off">
+            @Html.AntiForgeryToken()
+            <input type="text" id="chatTexto" maxlength="500" placeholder="Escribí tu consulta…" aria-label="Tu consulta" />
+            <button type="submit" class="btn btn-primary btn-sm">Enviar</button>
+        </form>
+    </section>
+
+    <button type="button" class="chat-boton" id="chatAbrir" aria-expanded="false" aria-controls="chatPanel">
+        Consultas
+    </button>
+</div>

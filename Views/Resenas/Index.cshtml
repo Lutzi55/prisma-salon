@@ -1,0 +1,71 @@
+﻿@model List<Resena>
+@{
+    ViewData["Title"] = "Reseñas";
+    var visibles = Model.Where(r => r.Visible).ToList();
+    var es = new System.Globalization.CultureInfo("es-AR");
+}
+
+<h1>Reseñas de clientes</h1>
+<p class="crud-descripcion">Opiniones que dejan los clientes después de su evento. Podés responderlas públicamente (para agradecer o resolver una inconformidad) y ocultar las que no correspondan.</p>
+<div class="cifras">
+    <div><small>Promedio publicado</small><b>@(visibles.Any() ? visibles.Average(r => r.Puntaje).ToString("0.0", es) : "—") ★</b></div>
+    <div><small>Visibles en el sitio</small><b>@visibles.Count</b></div>
+    <div><small>Ocultas</small><b>@(Model.Count - visibles.Count)</b></div>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="vacio">Todavía no hay reseñas.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Evento</th>
+                    <th>Puntaje</th>
+                    <th>Comentario</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.Fecha.ToString("dd/MM/yyyy")</td>
+                        <td>@r.Cliente.RazonSocialApellido</td>
+                        <td>@r.Contrato.Paquete.Nombre<br /><small>@r.Contrato.FechaEvento.ToString("dd/MM/yyyy")</small></td>
+                        <td class="estrellas text-nowrap" aria-label="@r.Puntaje de 5 estrellas">
+                            @for (var i = 1; i <= 5; i++)
+                            {
+                                <span class="@(i <= r.Puntaje ? "" : "vacia")">★</span>
+                            }
+                        </td>
+                        <td style="max-width:38ch">
+                            @r.Comentario
+                            @if (!string.IsNullOrEmpty(r.Respuesta))
+                            {
+                                <div class="respuesta-salon"><b>Tu respuesta:</b> @r.Respuesta</div>
+                            }
+                            else if (r.Puntaje <= 3)
+                            {
+                                <div class="nota-pago">Reseña con puntaje bajo: conviene responder.</div>
+                            }
+                        </td>
+                        <td><span class="estado @(r.Visible ? "estado-Confirmado" : "estado-Cancelado")">@(r.Visible ? "Visible" : "Oculta")</span></td>
+                        <td class="text-nowrap">
+                            <a asp-action="Responder" asp-route-id="@r.IdResena" class="btn @(string.IsNullOrEmpty(r.Respuesta) ? "btn-primary" : "btn-outline-dark") btn-sm">@(string.IsNullOrEmpty(r.Respuesta) ? "Responder" : "Editar respuesta")</a>
+                            <form asp-action="CambiarVisibilidad" asp-route-id="@r.IdResena" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-outline-dark btn-sm">@(r.Visible ? "Ocultar" : "Mostrar")</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

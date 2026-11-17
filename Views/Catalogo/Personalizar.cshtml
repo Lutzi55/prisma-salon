@@ -1,0 +1,170 @@
+﻿@model PersonalizarVM
+@{
+    var p = (PaqueteEvento)ViewData["Paquete"]!;
+    var categorias = (List<CategoriaOpcion>)ViewData["Categorias"]!;
+    var tieneFicha = (bool)ViewData["TieneFicha"]!;
+    var es = new System.Globalization.CultureInfo("es-AR");
+    var inv = System.Globalization.CultureInfo.InvariantCulture;
+    ViewData["Title"] = "Personalizar " + p.Nombre;
+    var manana = Reloj.Ahora().Date.AddDays(1).ToString("yyyy-MM-dd");
+}
+
+<a class="volver" asp-action="Detalle" asp-route-id="@p.IdPaquete">← Volver al paquete</a>
+
+<div class="personalizar">
+    <form asp-action="Personalizar" method="post" id="formPersonalizar" class="personalizar-form">
+        <input type="hidden" asp-for="IdPaquete" />
+        <h2>Personalizá tu @p.Nombre</h2>
+        <p class="crud-descripcion">
+            Elegí la fecha y lo que querés sumar. Las opciones marcadas como «Incluida» no tienen costo; el resto se suma al precio del paquete.
+            Al final elegís cuánto pagás ahora para reservar la fecha (la seña o todo de una) y con qué medio. Después confirmás el pago y el salón prepara tu contrato.
+        </p>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="aviso aviso-sena"><b>Seña obligatoria:</b> @PoliticaPagos.TextoAviso</div>
+
+        <fieldset class="bloque">
+            <legend>1. Fecha</legend>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="FechaEvento" class="form-label"></label>
+                    <input asp-for="FechaEvento" class="form-control" min="@manana" />
+                    <div class="form-text">Un solo evento por día. <a asp-controller="Calendario" asp-action="Index">Ver fechas libres</a></div>
+                    <span asp-validation-for="FechaEvento" class="text-danger"></span>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="bloque">
+            <legend>2. Personalización <small>(tiene cobro extra)</small></legend>
+            <span asp-validation-for="OpcionesIds" class="text-danger d-block mb-2"></span>
+            @foreach (var cat in categorias.Where(c => c.Opciones.Any()))
+            {
+                <div class="grupo-opc" data-unica="@(!cat.EsMultiple ? "1" : "0")">
+                    <h3>@cat.Nombre</h3>
+                    <p class="nota">@(cat.EsMultiple ? "Podés elegir varias o ninguna." : "Elegí una.")</p>
+                    <div class="opciones">
+                        @foreach (var o in cat.Opciones.OrderBy(o => o.PrecioAdicional))
+                        {
+                            <label class="opcion-card opcion-elegible">
+                                <input type="checkbox" name="OpcionesIds" value="@o.IdOpcion" data-precio="@o.PrecioAdicional.ToString(inv)" checked="@Model.OpcionesIds.Contains(o.IdOpcion)" />
+                                <span class="opcion-cuerpo">
+                                    <h4>@o.Nombre</h4>
+                                    @if (!string.IsNullOrEmpty(o.Colores))
+                                    {
+                                        <span class="paleta">
+                                            @foreach (var col in o.Colores.Split(','))
+                                            {
+                                                <span class="muestra" style="background:@col"></span>
+                                            }
+                                        </span>
+                                    }
+                                    @if (!string.IsNullOrEmpty(o.Descripcion)) { <span class="opcion-desc">@o.Descripcion</span> }
+                                    <span class="opcion-precio">@(o.PrecioAdicional == 0 ? "Incluida" : "+ $ " + o.PrecioAdicional.ToString("N0", es))</span>
+                                </span>
+                            </label>
+                        }
+                    </div>
+                </div>
+            }
+        </fieldset>
+
+        @if (!tieneFicha)
+        {
+            <fieldset class="bloque">
+                <legend>3. Tus datos para el contrato</legend>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label asp-for="RazonSocial" class="form-label"></label>
+                        <input asp-for="RazonSocial" class="form-control" autocomplete="name" />
+                        <span asp-validation-for="RazonSocial" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-7">
+                        <label asp-for="Domicilio" class="form-label"></label>
+                        <input asp-for="Domicilio" class="form-control" autocomplete="street-address" />
+                        <span asp-validation-for="Domicilio" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-5">
+                        <label asp-for="Telefono" class="form-label"></label>
+                        <input asp-for="Telefono" class="form-control" inputmode="numeric" autocomplete="tel" />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                </div>
+            </fieldset>
+        }
+
+        <fieldset class="bloque">
+            <legend>@(tieneFicha ? "3" : "4"). Comentarios</legend>
+            <textarea asp-for="Comentario" class="form-control" rows="3" maxlength="500" placeholder="Cantidad aproximada de invitados, horario que preferís, algo especial que quieras contarnos..."></textarea>
+            <span asp-validation-for="Comentario" class="text-danger"></span>
+        </fieldset>
+
+        <fieldset class="bloque">
+            <legend>@(tieneFicha ? "4" : "5"). Pago para reservar la fecha</legend>
+            <p class="form-text mt-0">La fecha queda reservada cuando el salón confirma este pago. El resto (si pagás la seña) lo abonás después de firmar el contrato, también en efectivo o cheque con turno.</p>
+            <div class="medios-elegir mb-3">
+                <label class="medio-opcion">
+                    <input type="radio" name="PagoInicial" value="Sena" checked="@(Model.PagoInicial != "Total")" />
+                    <span><b>Seña del @PoliticaPagos.PorcentajeSena %</b><small id="montoSena">$ @PoliticaPagos.Sena(p.Precio).ToString("N0", es)</small></span>
+                </label>
+                <label class="medio-opcion">
+                    <input type="radio" name="PagoInicial" value="Total" checked="@(Model.PagoInicial == "Total")" />
+                    <span><b>Todo de una</b><small id="montoTotal">$ @p.Precio.ToString("N0", es)</small></span>
+                </label>
+            </div>
+            <span asp-validation-for="PagoInicial" class="text-danger d-block"></span>
+            <label class="form-label">Medio de pago</label>
+            <div class="medios-elegir">
+                @foreach (var m in PoliticaPagos.MediosSena)
+                {
+                    <label class="medio-opcion">
+                        <input type="radio" name="MedioReserva" value="@m" checked="@(Model.MedioReserva == m)" />
+                        <span><b>@m</b><small>@(m == "Transferencia" ? "Alias PRISMA.SALON.EVENTOS" : "Pagás y subís el ticket")</small></span>
+                    </label>
+                }
+            </div>
+            <span asp-validation-for="MedioReserva" class="text-danger d-block"></span>
+        </fieldset>
+
+        <div class="form-check acepta-sena">
+            <input asp-for="AceptaSena" class="form-check-input" />
+            <label asp-for="AceptaSena" class="form-check-label">
+                Entiendo que para reservar la fecha tengo que pagar una seña del @PoliticaPagos.PorcentajeSena % por transferencia o tarjeta de débito.
+            </label>
+            <span asp-validation-for="AceptaSena" class="text-danger d-block"></span>
+        </div>
+    </form>
+
+    <aside class="resumen-pedido">
+        <h3>Tu pedido</h3>
+        <ul class="lineas">
+            <li><span>Paquete @p.Nombre</span><b>$ @p.Precio.ToString("N0", es)</b></li>
+            <li><span>Personalización</span><b id="totalExtras">Sin costo extra</b></li>
+            <li class="total"><span>Total estimado</span><b id="totalPedido">$ @p.Precio.ToString("N0", es)</b></li>
+            <li class="pagas-ahora"><span>Pagás ahora <small id="detalleAhora">seña, transferencia</small></span><b id="pagoAhora">$ @PoliticaPagos.Sena(p.Precio).ToString("N0", es)</b></li>
+        </ul>
+        <p class="nota-pago">En el paso siguiente confirmás el pago y subís el comprobante.</p>
+        <button type="submit" form="formPersonalizar" class="btn btn-primary w-100">Continuar al pago</button>
+    </aside>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/personalizar.js" asp-append-version="true"></script>
+    <script>
+        Personalizar.iniciar({
+            form: document.getElementById('formPersonalizar'),
+            precioBase: @p.Precio.ToString(inv),
+            total: document.getElementById('totalPedido'),
+            extras: document.getElementById('totalExtras'),
+            alCambiar: function (total, formato) {
+                const sena = Math.round(total * @PoliticaPagos.PorcentajeSena / 100);
+                const tipo = (document.querySelector('input[name="PagoInicial"]:checked') || {}).value || 'Sena';
+                const medio = (document.querySelector('input[name="MedioReserva"]:checked') || {}).value || 'Transferencia';
+                document.getElementById('montoSena').textContent = formato(sena);
+                document.getElementById('montoTotal').textContent = formato(total);
+                document.getElementById('pagoAhora').textContent = formato(tipo === 'Total' ? total : sena);
+                document.getElementById('detalleAhora').textContent = (tipo === 'Total' ? 'todo de una' : 'seña') + ', ' + medio.toLowerCase();
+            }
+        });
+    </script>
+}

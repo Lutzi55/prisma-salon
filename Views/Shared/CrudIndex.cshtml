@@ -1,0 +1,62 @@
+﻿@model IEnumerable<object>
+@{
+    var cols = (List<(string N, string L)>)ViewData["ColsIndex"]!;
+    var key = (string)ViewData["Key"]!;
+    ViewData["Title"] = (string)ViewData["Titulo"]!;
+    var es = new System.Globalization.CultureInfo("es-AR");
+
+    // Formato legible: Sí/No, montos con separador de miles, horas como 18:00
+    string Mostrar(object? v) => v switch
+    {
+        null => "",
+        bool b => b ? "Sí" : "No",
+        decimal d => d.ToString("N2", es),
+        TimeSpan t => t.ToString(@"hh\:mm"),
+        DateTime f => f.ToString("dd/MM/yyyy"),
+        _ => v.ToString() ?? ""
+    };
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2>@ViewData["Titulo"]</h2>
+        @if (ViewData["Descripcion"] is string descripcion)
+        {
+            <p class="crud-descripcion">@descripcion</p>
+        }
+    </div>
+    <a asp-action="Create" class="btn btn-primary">+ Nuevo</a>
+</div>
+
+@if (!Model.Any())
+{
+    <p>Todavía no hay registros cargados.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr>@foreach (var c in cols)
+                    {
+                        <th>@c.L</th>
+                    }<th></th></tr></thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var id = item.GetType().GetProperty(key)!.GetValue(item);
+                    <tr>
+                        @foreach (var c in cols)
+                        {
+                            <td>@Mostrar(item.GetType().GetProperty(c.N)!.GetValue(item))</td>
+                        }
+                        <td class="text-end text-nowrap">
+                            <a asp-action="Edit" asp-route-id="@id" class="btn btn-sm btn-outline-dark">Editar</a>
+                            <form asp-action="Delete" asp-route-id="@id" method="post" class="d-inline form-eliminar">
+                                <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

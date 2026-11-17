@@ -1,0 +1,199 @@
+﻿@model CalendarioVM
+@{
+    var es = new System.Globalization.CultureInfo("es-AR");
+    var titulo = Model.Primero.ToString("MMMM 'de' yyyy", es);
+    titulo = char.ToUpper(titulo[0]) + titulo[1..];
+    ViewData["Title"] = Model.EsAdmin ? "Calendario" : "Disponibilidad";
+    var anterior = Model.Primero.AddMonths(-1);
+    var siguiente = Model.Primero.AddMonths(1);
+    var diasSemana = new[] { "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom" };
+    var eventosMes = Model.Dias.Where(d => d.EnMes && d.Evento != null && (Model.EsAdmin || d.Evento.EsMio)).ToList();
+}
+
+<div class="contratos-cab">
+    <div>
+        <h2>@(Model.EsAdmin ? "Calendario de eventos" : "Fechas disponibles")</h2>
+        <p class="crud-descripcion">
+            @if (Model.EsAdmin)
+            {
+                <span>El salón hace un evento por día. Tocá un día para ver el evento, el personal citado y los shows, o para crear un contrato en una fecha libre.</span>
+            }
+            else if (Model.EsCliente)
+            {
+                <span>El salón hace un evento por día. Los días libres se pueden reservar: tocá uno y elegí el paquete. Tus eventos aparecen resaltados.</span>
+            }
+            else
+            {
+                <span>El salón hace un evento por día. Mirá qué fechas están libres; para reservar, creá tu cuenta o iniciá sesión.</span>
+            }
+        </p>
+    </div>
+    @if (Model.EsAdmin)
+    {
+        <a asp-action="Personal" asp-route-anio="@Model.Anio" asp-route-mes="@Model.Mes" class="btn btn-outline-dark">Agenda del personal</a>
+    }
+</div>
+
+<div class="cal-nav">
+    <a asp-action="Index" asp-route-anio="@anterior.Year" asp-route-mes="@anterior.Month" class="btn btn-outline-dark btn-sm" aria-label="Mes anterior">←</a>
+    <h3>@titulo</h3>
+    <a asp-action="Index" asp-route-anio="@siguiente.Year" asp-route-mes="@siguiente.Month" class="btn btn-outline-dark btn-sm" aria-label="Mes siguiente">→</a>
+    @if (Model.Primero.Year != Model.Hoy.Year || Model.Primero.Month != Model.Hoy.Month)
+    {
+        <a asp-action="Index" class="enlace">Volver a hoy</a>
+    }
+    <span class="cal-resumen">@Model.Libres días libres · @Model.Reservados reservados</span>
+</div>
+
+<div class="cal-leyenda" aria-hidden="true">
+    <span><i class="cal-dot libre"></i>Libre</span>
+    <span><i class="cal-dot reservado"></i>Reservado</span>
+    @if (Model.EsCliente) { <span><i class="cal-dot mio"></i>Tu evento</span> }
+    @if (Model.EsAdmin)
+    {
+        <span><i class="cal-dot accion"></i>Requiere tu acción</span>
+        <span><i class="cal-dot turno"></i>Turno de cobro</span>
+        <span><i class="cal-dot completo"></i>Pagado</span>
+    }
+</div>
+
+<div class="cal-grilla" role="grid" aria-label="Calendario de @titulo">
+    @foreach (var d in diasSemana)
+    {
+        <div class="cal-cab" role="columnheader">@d</div>
+    }
+    @foreach (var dia in Model.Dias)
+    {
+        var ev = dia.Evento;
+        var hoy = dia.Fecha == Model.Hoy;
+        var clase = !dia.EnMes ? "fuera"
+            : ev == null ? (dia.Pasado ? "pasado" : "libre")
+            : ev.EsMio ? "mio"
+            : Model.EsAdmin && ev.RequiereAccion ? "accion"
+            : Model.EsAdmin && ev.Completo ? "completo"
+            : "reservado";
+        var clickable = dia.EnMes && (ev != null && (Model.EsAdmin || ev.EsMio) || ev == null && !dia.Pasado && (Model.EsAdmin || Model.EsCliente) || dia.Turnos.Any());
+        <div class="cal-dia cal-@clase @(hoy ? "cal-hoy" : "")" role="gridcell">
+            @if (clickable)
+            {
+                <button type="button" class="cal-boton" data-dia="@dia.Fecha.ToString("yyyy-MM-dd")"
+                        aria-label="@dia.Fecha.ToString("dddd d 'de' MMMM", es): @(ev == null ? "libre" : "reservado")">
+                    <span class="cal-num">@dia.Fecha.Day</span>
+                    @if (ev != null && (Model.EsAdmin || ev.EsMio))
+                    {
+                        <span class="cal-texto">@(Model.EsAdmin ? ev.Cliente : "Tu evento")</span>
+                        <span class="cal-sub">@ev.Paquete</span>
+                    }
+                    else if (ev == null)
+                    {
+                        <span class="cal-texto">Libre</span>
+                    }
+                    @if (dia.Turnos.Any())
+                    {
+                        <span class="cal-turno">@dia.Turnos.Count @(dia.Turnos.Count == 1 ? "turno de cobro" : "turnos de cobro")</span>
+                    }
+                </button>
+            }
+            else
+            {
+                <span class="cal-num">@dia.Fecha.Day</span>
+                @if (dia.EnMes)
+                {
+                    <span class="cal-texto">@(ev != null ? "Reservado" : dia.Pasado ? "" : "Libre")</span>
+                }
+            }
+        </div>
+    }
+</div>
+
+@* Panel con el detalle del día elegido (se completa con los bloques ocultos de abajo) *@
+<section class="cal-panel" id="calPanel" hidden aria-live="polite"></section>
+
+<div hidden>
+    @foreach (var dia in Model.Dias.Where(d => d.EnMes))
+    {
+        var ev = dia.Evento;
+        <div class="cal-detalle" data-detalle="@dia.Fecha.ToString("yyyy-MM-dd")">
+            <h4>@dia.Fecha.ToString("dddd d 'de' MMMM 'de' yyyy", es)</h4>
+            @if (dia.Turnos.Any())
+            {
+                <p><b>Turnos de cobro en el salón:</b> @string.Join("; ", dia.Turnos).</p>
+            }
+            @if (ev != null && Model.EsAdmin)
+            {
+                <p><b>@ev.Cliente</b>, @ev.Paquete, @ev.Horario.</p>
+                <p class="nota-pago">@ev.Etapa</p>
+                <p><b>Personal citado:</b> @(ev.Personal.Any() ? string.Join("; ", ev.Personal) : "todavía no se asignó")</p>
+                <p><b>Shows:</b> @(ev.Shows.Any() ? string.Join("; ", ev.Shows) : "ninguno")</p>
+                <a asp-controller="Contratos" asp-action="Detalle" asp-route-id="@ev.IdContrato" class="btn btn-primary btn-sm">Ver ficha del contrato</a>
+            }
+            else if (ev != null && ev.EsMio)
+            {
+                <p><b>Tu evento:</b> @ev.Paquete, @ev.Horario.</p>
+                <p class="nota-pago">@ev.Etapa</p>
+                <a asp-controller="MisContratos" asp-action="Index" class="btn btn-primary btn-sm">Ir a mis contratos</a>
+            }
+            else if (ev == null && Model.EsAdmin)
+            {
+                <p>Fecha libre.</p>
+                <a asp-controller="Contratos" asp-action="Create" asp-route-fecha="@dia.Fecha.ToString("yyyy-MM-dd")" class="btn btn-primary btn-sm">Crear contrato para este día</a>
+            }
+            else if (ev == null && Model.EsCliente)
+            {
+                <p>¡Está libre! Elegí el paquete para pedirlo con esta fecha:</p>
+                <div class="cal-paquetes">
+                    @foreach (var p in Model.Paquetes)
+                    {
+                        <a asp-controller="Catalogo" asp-action="Personalizar" asp-route-id="@p.IdPaquete" asp-route-fecha="@dia.Fecha.ToString("yyyy-MM-dd")" class="btn btn-outline-dark btn-sm">@p.Nombre</a>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@if (!User.Identity!.IsAuthenticated)
+{
+    <div class="acceso-registro">
+        <h3>¿Encontraste tu fecha?</h3>
+        <p>Creá tu cuenta gratis para ver los precios, personalizar el paquete y reservar el día.</p>
+        <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register">Crear mi cuenta</a>
+        <a class="btn btn-link" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="/Calendario">Ya tengo cuenta</a>
+    </div>
+}
+
+@if (eventosMes.Any())
+{
+    <section class="cal-lista">
+        <h3>@(Model.EsAdmin ? "Eventos del mes" : "Tus eventos este mes")</h3>
+        <ul class="lineas">
+            @foreach (var d in eventosMes)
+            {
+                <li>
+                    <span><b>@d.Fecha.ToString("ddd d", es)</b> @(Model.EsAdmin ? d.Evento!.Cliente + ", " : "")@d.Evento!.Paquete</span>
+                    <span>@d.Evento.Horario</span>
+                </li>
+            }
+        </ul>
+    </section>
+}
+
+@section Scripts {
+    <script>
+        (function () {
+            const panel = document.getElementById('calPanel');
+            let activo = null;
+            document.querySelectorAll('.cal-boton').forEach(b => b.addEventListener('click', () => {
+                const fecha = b.dataset.dia;
+                const detalle = document.querySelector('[data-detalle="' + fecha + '"]');
+                if (!detalle) return;
+                if (activo) activo.classList.remove('cal-elegido');
+                activo = b.closest('.cal-dia');
+                activo.classList.add('cal-elegido');
+                panel.innerHTML = detalle.innerHTML;
+                panel.hidden = false;
+                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }));
+        })();
+    </script>
+}

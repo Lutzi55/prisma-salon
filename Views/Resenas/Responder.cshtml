@@ -1,0 +1,44 @@
+﻿@model Resena
+@{
+    ViewData["Title"] = "Responder reseña";
+    var borrador = ViewData["Borrador"] as string ?? Model.Respuesta ?? "";
+    var negativa = Model.Puntaje <= 3;
+}
+<a class="volver" asp-action="Index">← Volver a reseñas</a>
+<h2>Responder a @Model.Cliente.RazonSocialApellido</h2>
+<p class="crud-descripcion">La respuesta se publica debajo de la reseña, en el inicio y en «Mis opiniones» del cliente.</p>
+
+<figure class="experiencia mb-4" style="max-width:640px">
+    <div class="estrellas" role="img" aria-label="@Model.Puntaje de 5 estrellas">
+        @for (var i = 1; i <= 5; i++)
+        {
+            <span class="@(i <= Model.Puntaje ? "" : "vacia")">★</span>
+        }
+    </div>
+    <blockquote>@Model.Comentario</blockquote>
+    <figcaption><b>@Model.Cliente.RazonSocialApellido</b><span>@Model.Contrato.Paquete.Nombre, evento del @Model.Contrato.FechaEvento.ToString("dd/MM/yyyy")</span></figcaption>
+</figure>
+
+<div class="aviso" style="max-width:640px">
+    @if (negativa)
+    {
+        <span><b>Sugerencia:</b> agradecé la crítica, reconocé lo que no salió bien y contá qué van a hacer para mejorar. Si corresponde, ofrecé contactarlo por privado.</span>
+    }
+    else
+    {
+        <span><b>Sugerencia:</b> agradecé la confianza y mencioná algo concreto de su evento.</span>
+    }
+</div>
+
+<form asp-action="Responder" asp-route-id="@Model.IdResena" method="post" style="max-width:640px">
+    <label for="respuesta" class="form-label">Tu respuesta</label>
+    <textarea id="respuesta" name="respuesta" class="form-control" rows="5" maxlength="800">@borrador</textarea>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="text-danger">@string.Join(" ", ViewData.ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage))</div>
+    }
+    <div class="mt-3">
+        <button class="btn btn-primary">Publicar respuesta</button>
+        <a asp-action="Index" class="btn btn-link">Cancelar</a>
+    </div>
+</form>

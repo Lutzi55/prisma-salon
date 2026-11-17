@@ -1,0 +1,255 @@
+﻿@model Contrato
+@{
+    var c = Model;
+    ViewData["Title"] = "Contrato de " + c.Cliente.RazonSocialApellido;
+    var es = new System.Globalization.CultureInfo("es-AR");
+    string M(decimal d) => "$ " + d.ToString("N0", es);
+
+    var paso = EtapaContrato.Actual(c);
+    var opciones = c.ContratoOpciones.OrderBy(x => x.Opcion.Categoria?.Orden).ToList();
+    var sugerido = c.Paquete.Precio + opciones.Sum(x => x.PrecioAcordado);
+    var revisar = c.Pagos.Where(p => p.Estado == "Pendiente").ToList();
+    var abiertos = c.Pagos.Where(p => EstadoPago.AdmiteComprobante(p.Estado)).ToList();
+    var porcentaje = c.ValorRealAcordado > 0 ? (int)Math.Min(100, Math.Round(c.Pagado / c.ValorRealAcordado * 100)) : 0;
+}
+
+<a class="volver" asp-action="Index">← Volver a contratos</a>
+
+<div class="ficha-cab mb-2">
+    <div>
+        <h2 class="mb-1">@c.Cliente.RazonSocialApellido</h2>
+        <p class="mb-0">@c.Paquete.Nombre, evento del @c.FechaEvento.ToString("dddd d 'de' MMMM 'de' yyyy", es)</p>
+        @if (c.PedidoPorCliente)
+        {
+            <span class="etiqueta-pedido">Pedido armado por el cliente</span>
+        }
+    </div>
+</div>
+
+<partial name="_Etapas" model="c" />
+
+@* ---------- Próximo paso ---------- *@
+<div class="proximo @(EtapaContrato.TocaAlAdmin(paso) ? "proximo-accion" : "")">
+    <div>
+        <small>@(EtapaContrato.TocaAlAdmin(paso) ? "Te toca a vos" : paso == EtapaContrato.Paso.Completo ? "Completo" : "Esperando al cliente")</small>
+        <p>@EtapaContrato.TextoAdmin(paso)</p>
+        @if (paso == EtapaContrato.Paso.EsperarPago)
+        {
+            foreach (var p in abiertos)
+            {
+                <p class="proximo-detalle">@p.Concepto: @M(p.Monto)@(p.EsSena ? " (seña)" : ""), vence el @p.FechaVencimiento?.ToString("dd/MM/yyyy")@(p.Estado == "Rechazado" ? " (comprobante rechazado, esperando uno nuevo)" : "").</p>
+            }
+        }
+    </div>
+    <div class="proximo-botones">
+        @switch (paso)
+        {
+            case EtapaContrato.Paso.RedactarContrato:
+                <a asp-action="Redactar" asp-route-id="@c.IdContrato" class="btn btn-claro">Redactar contrato</a>
+                break;
+            case EtapaContrato.Paso.EnviarContrato:
+                <a asp-action="Redactar" asp-route-id="@c.IdContrato" class="btn btn-claro">Revisar y enviar al cliente</a>
+                break;
+            case EtapaContrato.Paso.EnviarRecibo:
+                <a asp-controller="Pagos" asp-action="Solicitar" asp-route-idContrato="@c.IdContrato" class="btn btn-claro">Enviar recibo de pago</a>
+                break;
+            case EtapaContrato.Paso.CobrarEnSalon:
+                foreach (var p in abiertos.Where(x => x.TurnoPago != null))
+                {
+                    <div class="revisar-comprobante">
+                        <span>Turno: <b>@p.TurnoPago!.Value.ToString("dddd d/MM 'a las' HH:mm", es)</b>, paga @M(p.Monto) en @p.MetodoPago.ToLower()</span>
+                        <div>
+                            <form asp-controller="Pagos" asp-action="CobrarEnSalon" asp-route-id="@p.IdPago" method="post" class="d-inline">
+                                <button class="btn btn-claro btn-sm">Registrar cobro</button>
+                            </form>
+                            <a asp-controller="Pagos" asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="reprogramar" class="btn btn-borde-claro btn-sm">Cambiar vencimiento</a>
+                        </div>
+                    </div>
+                }
+                break;
+            case EtapaContrato.Paso.RevisarComprobante:
+                foreach (var p in revisar)
+                {
+                    <div class="revisar-comprobante">
+                        <span>@p.Concepto: <b>@M(p.Monto)</b> por @p.MetodoPago, pagado el @p.FechaPago.ToString("dd/MM/yyyy")</span>
+                        <div>
+                            @if (!string.IsNullOrEmpty(p.RutaComprobanteImg))
+                            {
+                                <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" data-ver-comprobante class="btn btn-borde-claro btn-sm">Ver comprobante</a>
+                            }
+                            <form asp-controller="Pagos" asp-action="Confirmar" asp-route-id="@p.IdPago" method="post" class="d-inline">
+                                <button class="btn btn-claro btn-sm">Confirmar pago</button>
+                            </form>
+                            <a asp-controller="Pagos" asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="rechazar" class="btn btn-borde-claro btn-sm">Rechazar</a>
+                        </div>
+                    </div>
+                }
+                break;
+        }
+    </div>
+</div>
+
+<div class="detalle-grilla">
+    @* ---------- Lo contratado ---------- *@
+    <section class="bloque">
+        <h3>Lo que se contrató</h3>
+        <ul class="lineas">
+            <li><span>Paquete @c.Paquete.Nombre</span><b>@M(c.Paquete.Precio)</b></li>
+            @foreach (var x in opciones)
+            {
+                <li>
+                    <span>@x.Opcion.Nombre <small>@x.Opcion.Categoria?.Nombre</small></span>
+                    <b>@(x.PrecioAcordado == 0 ? "Incluida" : "+ " + M(x.PrecioAcordado))</b>
+                </li>
+            }
+            @if (!opciones.Any())
+            {
+                <li class="sin-dato"><span>Sin personalizaciones</span></li>
+            }
+            <li class="total"><span>Valor según paquete y opciones</span><b>@M(sugerido)</b></li>
+            <li class="total"><span>Valor acordado en el contrato</span><b>@M(c.ValorRealAcordado)</b></li>
+        </ul>
+        @if (sugerido != c.ValorRealAcordado)
+        {
+            <p class="nota-pago">El valor acordado es distinto al de la lista (descuento o ajuste acordado con el cliente).</p>
+        }
+
+        <dl class="datos-lista">
+            <dt>Forma de pago</dt><dd>@c.FormaPago</dd>
+            <dt>Coordinador</dt><dd>@(c.Paquete.Coordinador?.NombreApellido ?? "Sin asignar")</dd>
+            <dt>Shows</dt><dd>@(c.ContratoShows.Any() ? string.Join(", ", c.ContratoShows.Select(s => s.Show.NombreShow)) : "Ninguno")</dd>
+            <dt>Personal</dt>
+            <dd>@(c.ContratoEmpleados.Any() ? string.Join(", ", c.ContratoEmpleados.Select(e => $"{e.Empleado.NombreApellido} ({e.Empleado.Puesto})")) + $", citados a las {c.ContratoEmpleados.First().HoraCitacion:hh\\:mm}" : "Sin asignar")</dd>
+        </dl>
+        @if (!string.IsNullOrEmpty(c.NotaCliente))
+        {
+            <div class="aviso"><b>Comentario del cliente:</b> @c.NotaCliente</div>
+        }
+        @if (!c.Firmado)
+        {
+            <a asp-action="Edit" asp-route-id="@c.IdContrato" class="btn btn-outline-dark btn-sm">Editar datos, opciones y personal</a>
+        }
+    </section>
+
+    @* ---------- Contrato ---------- *@
+    <section class="bloque">
+        <h3>Contrato</h3>
+        <p>
+            Estado: <span class="estado estado-@(c.Firmado ? "Confirmado" : c.ContratoEnviado ? "Pendiente" : "Solicitado")">@(c.Firmado ? "Firmado" : c.ContratoEnviado ? "Enviado, falta la firma" : string.IsNullOrWhiteSpace(c.TextoContrato) ? "Sin redactar" : "Borrador")</span>
+        </p>
+        @if (c.Firmado)
+        {
+            <p class="nota-pago">Firmado por @c.FirmanteNombre el @c.FirmadoEl?.ToString("dd/MM/yyyy HH:mm") (firma electrónica simple con huella SHA-256).</p>
+        }
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="Redactar" asp-route-id="@c.IdContrato" class="btn btn-outline-dark btn-sm">@(c.Firmado ? "Ver texto firmado" : "Redactar / editar texto")</a>
+            @if (!string.IsNullOrWhiteSpace(c.TextoContrato) || !string.IsNullOrEmpty(c.RutaContratoPdf))
+            {
+                <a asp-controller="Archivos" asp-action="Contrato" asp-route-id="@c.IdContrato" class="btn btn-outline-dark btn-sm">Descargar PDF</a>
+            }
+            @if (!c.Firmado && !c.Pagos.Any())
+            {
+                <form asp-action="Delete" asp-route-id="@c.IdContrato" method="post" class="d-inline form-eliminar" data-mensaje="Se elimina el contrato con sus opciones, shows y personal asignado.">
+                    <button class="btn btn-outline-danger btn-sm">Eliminar contrato</button>
+                </form>
+            }
+        </div>
+    </section>
+</div>
+
+@* ---------- Pagos ---------- *@
+<section class="bloque" id="pagos">
+    <div class="ficha-cab">
+        <h3 class="mb-0">Pagos</h3>
+        <div class="d-flex flex-wrap gap-2">
+            @if (c.PorSolicitar > 0)
+            {
+                <a asp-controller="Pagos" asp-action="Solicitar" asp-route-idContrato="@c.IdContrato" class="btn btn-primary btn-sm">Enviar recibo de pago</a>
+            }
+            @if (c.Saldo - c.EnRevision > 0)
+            {
+                <a asp-controller="Pagos" asp-action="Create" asp-route-idContrato="@c.IdContrato" class="btn btn-outline-dark btn-sm" title="Para pagos que recibiste en mano (efectivo o cheque)">Registrar pago recibido</a>
+            }
+        </div>
+    </div>
+
+    <div class="cifras">
+        <div><small>Valor acordado</small><b>@M(c.ValorRealAcordado)</b></div>
+        <div><small>Pagado</small><b>@M(c.Pagado)</b></div>
+        <div><small>En revisión</small><b>@M(c.EnRevision)</b></div>
+        <div><small>Pedido al cliente</small><b>@M(c.Solicitado)</b></div>
+        <div><small>Falta pedir</small><b>@M(Math.Max(0, c.PorSolicitar))</b></div>
+    </div>
+    <div class="progreso"><span style="width:@(porcentaje)%"></span></div>
+    <p class="progreso-txt">@porcentaje % pagado</p>
+
+    @if (!c.Pagos.Any())
+    {
+        <p class="vacio">Todavía no hay pagos. Usá «Enviar recibo de pago»: el primero sale como la seña del @PoliticaPagos.PorcentajeSena % (transferencia o débito).</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead><tr><th>Concepto</th><th>Monto</th><th>Estado</th><th>Fecha</th><th>Comprobante</th><th></th></tr></thead>
+                <tbody>
+                    @foreach (var p in c.Pagos.OrderByDescending(p => p.FechaPago))
+                    {
+                        var abierto = EstadoPago.AdmiteComprobante(p.Estado);
+                        <tr>
+                            <td>
+                                @p.Concepto @if (p.EsSena) { <span class="etiqueta-pedido">Seña</span> }
+                                <br /><small class="text-muted">@(abierto ? (p.TurnoPago != null ? $"Turno {p.TurnoPago:dd/MM HH:mm}, {p.MetodoPago.ToLower()}" : "Medio: a definir por el cliente") : p.MetodoPago)</small>
+                            </td>
+                            <td>@M(p.Monto)</td>
+                            <td>
+                                <span class="estado estado-@p.Estado">@EstadoPago.Etiqueta(p.Estado)</span>
+                                @if (!string.IsNullOrEmpty(p.Nota)) { <div class="nota-pago">@p.Nota</div> }
+                            </td>
+                            <td>@(abierto && p.FechaVencimiento != null ? "Vence " + p.FechaVencimiento.Value.ToString("dd/MM/yyyy") : p.FechaPago.ToString("dd/MM/yyyy"))</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(p.RutaComprobanteImg))
+                                {
+                                    <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" data-ver-comprobante>Ver</a>
+                                    <span>/</span>
+                                    <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" asp-route-pdf="true">PDF</a>
+                                }
+                                else { <span class="text-muted">Sin comprobante</span> }
+                            </td>
+                            <td class="text-end text-nowrap">
+                                @if (p.Estado == "Pendiente")
+                                {
+                                    <form asp-controller="Pagos" asp-action="Confirmar" asp-route-id="@p.IdPago" method="post" class="d-inline">
+                                        <button class="btn btn-sm btn-success">Confirmar</button>
+                                    </form>
+                                    <a asp-controller="Pagos" asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="rechazar" class="btn btn-sm btn-outline-danger">Rechazar</a>
+                                }
+                                else if (abierto)
+                                {
+                                    if (p.TurnoPago != null)
+                                    {
+                                        <form asp-controller="Pagos" asp-action="CobrarEnSalon" asp-route-id="@p.IdPago" method="post" class="d-inline">
+                                            <button class="btn btn-sm btn-success">Registrar cobro</button>
+                                        </form>
+                                    }
+                                    <a asp-controller="Pagos" asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="reprogramar" class="btn btn-sm btn-outline-dark">Cambiar vencimiento</a>
+                                    <a asp-controller="Pagos" asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="cancelar" class="btn btn-sm btn-outline-danger">Cancelar</a>
+                                }
+                                else if (p.Estado == "Confirmado")
+                                {
+                                    <a asp-controller="Pagos" asp-action="Gestionar" asp-route-id="@p.IdPago" asp-route-accion="reembolsar" class="btn btn-sm btn-outline-dark">Reembolsar</a>
+                                }
+                                else if (p.Estado == "Cancelado")
+                                {
+                                    <form asp-controller="Pagos" asp-action="Delete" asp-route-id="@p.IdPago" method="post" class="d-inline form-eliminar">
+                                        <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

@@ -1,0 +1,55 @@
+﻿@model SolicitudVM
+@{
+    var c = (Contrato)ViewData["Contrato"]!;
+    ViewData["Title"] = "Enviar recibo de pago";
+    var es = new System.Globalization.CultureInfo("es-AR");
+}
+<a class="volver" asp-controller="Contratos" asp-action="Detalle" asp-route-id="@c.IdContrato">← Volver al contrato</a>
+<h2>Enviar recibo de pago</h2>
+<p class="crud-descripcion">
+    El cliente lo va a ver en «Mis contratos» con el monto y el vencimiento. Paga por transferencia, cheque o efectivo
+    y sube el comprobante; después lo confirmás desde la ficha del contrato.
+</p>
+
+<div class="cifras">
+    <div><small>Cliente</small><b>@c.Cliente.RazonSocialApellido</b></div>
+    <div><small>Valor acordado</small><b>$ @c.ValorRealAcordado.ToString("N0", es)</b></div>
+    <div><small>Falta pedir</small><b>$ @c.PorSolicitar.ToString("N0", es)</b></div>
+</div>
+
+<form asp-action="Solicitar" method="post" class="col-md-7">
+    <input type="hidden" asp-for="IdContrato" />
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Monto" class="form-label">Monto a pagar</label>
+            <input asp-for="Monto" type="number" step="0.01" class="form-control" />
+            <div class="form-text">Por defecto, el total que falta. Podés pedir una seña y el resto después.</div>
+            <span asp-validation-for="Monto" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="FechaVencimiento" class="form-label"></label>
+            <input asp-for="FechaVencimiento" class="form-control" max="@c.FechaEvento.ToString("yyyy-MM-dd")" />
+            <div class="form-text">Seña: @PoliticaPagos.DiasParaSena días. Saldo: hasta @PoliticaPagos.DiasAntesDelEvento días antes del evento (@PoliticaPagos.VencimientoSaldo(c.FechaEvento).ToString("dd/MM/yyyy")). Lo podés cambiar.</div>
+            <span asp-validation-for="FechaVencimiento" class="text-danger"></span>
+        </div>
+        <div class="col-12">
+            <div class="form-check">
+                <input asp-for="EsSena" class="form-check-input" />
+                <label asp-for="EsSena" class="form-check-label"></label>
+            </div>
+            <div class="form-text">La seña (@PoliticaPagos.PorcentajeSena % del valor: $ @PoliticaPagos.Sena(c.ValorRealAcordado).ToString("N0", es)) es obligatoria para reservar la fecha. El saldo después se puede pagar también en efectivo o cheque, con turno.</div>
+        </div>
+        <div class="col-12">
+            <label asp-for="Concepto" class="form-label"></label>
+            <input asp-for="Concepto" class="form-control" placeholder="Ej: Pago total del evento, seña del 30 %" />
+            <span asp-validation-for="Concepto" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-primary">Enviar recibo al cliente</button>
+        <a asp-controller="Contratos" asp-action="Detalle" asp-route-id="@c.IdContrato" class="btn btn-link">Cancelar</a>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

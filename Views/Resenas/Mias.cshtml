@@ -1,0 +1,60 @@
+﻿@model List<Contrato>
+@{
+    ViewData["Title"] = "Mis opiniones";
+    var resenas = (Dictionary<int, Resena>)ViewData["Resenas"]!;
+    var hoy = (DateTime)ViewData["Hoy"]!;
+}
+
+<h1>Mis opiniones</h1>
+<p class="detalle-lead">Después de tu evento podés contarnos cómo te fue. Tu opinión se publica en la sección Experiencias del inicio.</p>
+
+@if (!Model.Any())
+{
+    <p class="vacio">Todavía no tenés eventos vinculados a tu cuenta.</p>
+}
+
+@foreach (var c in Model)
+{
+    <article class="ficha">
+        <div class="ficha-cab">
+            <div>
+                <h3>@c.Paquete.Nombre</h3>
+                <small>Evento del @c.FechaEvento.ToString("dd/MM/yyyy")</small>
+            </div>
+
+            @if (resenas.TryGetValue(c.IdContrato, out var r))
+            {
+                <a class="btn btn-outline-dark btn-sm" asp-action="Opinar" asp-route-id="@c.IdContrato">Editar mi opinión</a>
+            }
+            else if (c.FechaEvento.Date < hoy)
+            {
+                <a class="btn btn-primary btn-sm" asp-action="Opinar" asp-route-id="@c.IdContrato">Contar mi experiencia</a>
+            }
+            else
+            {
+                <span class="estado">Disponible después del evento</span>
+            }
+        </div>
+
+        @if (resenas.TryGetValue(c.IdContrato, out var mia))
+        {
+            <div class="mi-resena">
+                <div class="estrellas" role="img" aria-label="@mia.Puntaje de 5 estrellas">
+                    @for (var i = 1; i <= 5; i++)
+                    {
+                        <span class="@(i <= mia.Puntaje ? "" : "vacia")">★</span>
+                    }
+                </div>
+                <p>“@mia.Comentario”</p>
+                @if (!string.IsNullOrEmpty(mia.Respuesta))
+                {
+                    <div class="respuesta-salon"><b>Respuesta de Prisma Salón:</b> @mia.Respuesta</div>
+                }
+                @if (!mia.Visible)
+                {
+                    <small class="nota-pago">El salón ocultó esta opinión del sitio.</small>
+                }
+            </div>
+        }
+    </article>
+}

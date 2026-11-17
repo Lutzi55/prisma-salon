@@ -1,0 +1,87 @@
+﻿@model List<Auditoria>
+@{
+    ViewData["Title"] = "Auditoría";
+    var q = Context.Request.Query;
+    var entidades = (List<string>)ViewData["Entidades"]!;
+    var verbos = new[] { "Creó", "Editó", "Eliminó", "Asignó", "Quitó", "Cambió", "Agregó", "Firmó", "Solicitó", "Envió", "Confirmó", "Rechazó", "Reprogramó", "Canceló", "Registró" };
+}
+<h2>Auditoría</h2>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+        <label class="form-label">Usuario</label>
+        <input name="usuario" value="@q["usuario"]" class="form-control" placeholder="Correo" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label">Buscar en lo que se hizo</label>
+        <input name="texto" value="@q["texto"]" class="form-control" placeholder="Ej: Rodríguez" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Sección</label>
+        <select name="entidad" class="form-select">
+            <option value="">Todas</option>
+            @foreach (var e in entidades)
+            {
+                <option value="@e" selected="@(q["entidad"] == e)">@e</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Acción</label>
+        <select name="accion" class="form-select">
+            <option value="">Todas</option>
+            @foreach (var a in new[] { "Crear", "Editar", "Eliminar" })
+            {
+                <option value="@a" selected="@(q["accion"] == a)">@a</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Desde</label>
+        <input type="date" name="desde" value="@q["desde"]" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label class="form-label">Hasta</label>
+        <input type="date" name="hasta" value="@q["hasta"]" class="form-control" />
+    </div>
+    <div class="col-md-2 d-flex align-items-end"><button class="btn btn-primary w-100">Filtrar</button></div>
+</form>
+
+@if (!Model.Any())
+{
+     <p>No hay registros para esos filtros.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Fecha y hora</th><th>Usuario</th><th>Qué se hizo</th></tr></thead>
+            <tbody>
+                @foreach (var a in Model)
+                {
+                    // Registros viejos no empiezan con un verbo: se les antepone la acción
+                    var texto = string.IsNullOrEmpty(a.Descripcion) ? $"{a.Accion}: {a.Entidad} {a.EntidadId}"
+                    : verbos.Any(v => a.Descripcion.StartsWith(v)) ? a.Descripcion
+                    : $"{a.Accion}: {a.Descripcion}";
+                    <tr>
+                        <td class="text-nowrap">@a.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                        <td>@a.UsuarioEmail</td>
+                        <td>
+                            <b>@texto</b>
+                            @if (!string.IsNullOrEmpty(a.Detalle))
+                            {
+                                <ul class="cambios">
+                                    @foreach (var l in a.Detalle.Split("; ", StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <li>@l</li>
+                                    }
+                                </ul>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <p class="text-muted">Se muestran los últimos 200 movimientos.</p>
+}

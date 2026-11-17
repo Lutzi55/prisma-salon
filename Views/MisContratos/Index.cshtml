@@ -1,0 +1,194 @@
+﻿@model List<Contrato>
+@{
+    ViewData["Title"] = "Mis contratos";
+    var hoy = Reloj.Ahora().Date;
+    var es = new System.Globalization.CultureInfo("es-AR");
+    string M(decimal d) => "$ " + d.ToString("N0", es);
+}
+@functions {
+    static string Plazo(Pago p, DateTime hoy)
+    {
+        if (p.FechaVencimiento == null) return "";
+        var dias = (p.FechaVencimiento.Value.Date - hoy).Days;
+        return dias < 0 ? $"venció el {p.FechaVencimiento:dd/MM/yyyy}"
+             : dias == 0 ? "vence hoy"
+             : dias == 1 ? "vence mañana"
+             : $"vence el {p.FechaVencimiento:dd/MM/yyyy} (en {dias} días)";
+    }
+}
+
+<h2>Mis contratos</h2>
+<p class="crud-descripcion">
+    Seguí cada evento paso a paso: pedido, contrato, firma, pago y listo. Cuando te toque hacer algo, vas a ver un botón verde.
+</p>
+
+@if (!Model.Any())
+{
+    <div class="proximo">
+        <div>
+            <small>Todavía no tenés eventos</small>
+            <p>Elegí un paquete en el inicio y tocá «Personalizar y pedir» para armar tu evento.</p>
+        </div>
+        <div class="proximo-botones">
+            <a asp-controller="Home" asp-action="Index" asp-fragment="paquetes" class="btn btn-primary">Ver paquetes</a>
+        </div>
+    </div>
+}
+
+@foreach (var c in Model)
+{
+    var paso = EtapaContrato.Actual(c);
+    var abiertos = c.Pagos.Where(p => EstadoPago.AdmiteComprobante(p.Estado)).OrderBy(p => p.FechaVencimiento).ToList();
+    var enRevision = c.Pagos.Where(p => p.Estado == "Pendiente").ToList();
+    var historial = c.Pagos.Where(p => !EstadoPago.AdmiteComprobante(p.Estado)).OrderByDescending(p => p.FechaPago).ToList();
+    var opciones = c.ContratoOpciones.OrderBy(x => x.Opcion.Categoria?.Orden).ToList();
+    var porcentaje = c.ValorRealAcordado > 0 ? (int)Math.Min(100, Math.Round(c.Pagado / c.ValorRealAcordado * 100)) : 0;
+    var tienePdf = (!string.IsNullOrEmpty(c.TextoContrato) && c.ContratoEnviado) || !string.IsNullOrEmpty(c.RutaContratoPdf);
+    var pasado = c.FechaEvento.Date < hoy;
+
+    <article class="ficha ficha-cliente">
+        <div class="ficha-cab">
+            <div>
+                <h3>@c.Paquete.Nombre</h3>
+                <p class="mb-0">@c.FechaEvento.ToString("dddd d 'de' MMMM 'de' yyyy", es)@(pasado ? " (ya realizado)" : "")</p>
+            </div>
+            <div class="ficha-acciones">
+                @if (tienePdf)
+                {
+                    <a asp-controller="Archivos" asp-action="Contrato" asp-route-id="@c.IdContrato" class="btn btn-outline-dark btn-sm">Descargar contrato</a>
+                }
+            </div>
+        </div>
+
+        <partial name="_Etapas" model="c" />
+
+        @* ---------- Lo que tenés que hacer ahora ---------- *@
+        <div class="proximo @(EtapaContrato.TocaAlCliente(paso) ? "proximo-accion" : "")">
+            <div>
+                <small>@(EtapaContrato.TocaAlCliente(paso) ? "Te toca a vos" : paso == EtapaContrato.Paso.Completo ? "Completo" : "Lo está haciendo el salón")</small>
+                <p>@EtapaContrato.TextoCliente(paso)</p>
+                @if (paso == EtapaContrato.Paso.EsperarPago || paso == EtapaContrato.Paso.CobrarEnSalon)
+                {
+                    foreach (var p in abiertos)
+                    {
+                        <p class="proximo-detalle">
+                            <b>@p.Concepto: @M(p.Monto)</b>, medio elegido: @p.MetodoPago.ToLower(), @Plazo(p, hoy).
+                            @if (p.TurnoPago != null) { <span>Tu turno: <b>@p.TurnoPago.Value.ToString("dddd d/MM 'a las' HH:mm", es)</b>, en el salón (@p.MetodoPago.ToLower()).</span> }
+                            @if (p.Estado == "Rechazado") { <span>El salón rechazó el comprobante anterior: @p.Nota</span> }
+                            @if (p.Estado == "Reprogramado" && !string.IsNullOrEmpty(p.Nota)) { <span>Nota del salón: @p.Nota</span> }
+                        </p>
+                    }
+                }
+                @if (paso == EtapaContrato.Paso.RevisarComprobante)
+                {
+                    foreach (var p in enRevision)
+                    {
+                        <p class="proximo-detalle">@p.Concepto: @M(p.Monto), enviado el @p.FechaPago.ToString("dd/MM/yyyy").</p>
+                    }
+                }
+            </div>
+            <div class="proximo-botones">
+                @if (c.Pagado == 0 && c.PorSolicitar >= c.ValorRealAcordado && !pasado)
+                {
+                    <form asp-action="Reservar" asp-route-id="@c.IdContrato" method="post">
+                        <button class="btn btn-claro">Pagar la seña para reservar</button>
+                    </form>
+                }
+                @if (paso == EtapaContrato.Paso.EsperarFirma)
+                {
+                    <a asp-action="Firmar" asp-route-id="@c.IdContrato" class="btn btn-claro">Leer y firmar el contrato</a>
+                }
+                @if (paso == EtapaContrato.Paso.EsperarPago || paso == EtapaContrato.Paso.CobrarEnSalon)
+                {
+                    foreach (var p in abiertos)
+                    {
+                        <a asp-action="PagarSolicitud" asp-route-id="@p.IdPago" class="btn btn-claro">@(p.TurnoPago != null ? "Cambiar turno o forma de pago" : p.Estado == "Rechazado" ? "Reenviar comprobante" : p.EsSena ? "Confirmar y pagar la seña" : "Confirmar y pagar")</a>
+                    }
+                }
+            </div>
+        </div>
+
+        @if (paso == EtapaContrato.Paso.EsperarPago)
+        {
+            <div class="medios-pago">
+                <b>Cómo pagar</b>
+                <span><b>Transferencia o tarjeta de débito:</b> alias PRISMA.SALON.EVENTOS, a nombre de Prisma Salón (datos de simulación). Después subí el comprobante.</span>
+                @if (abiertos.Any(p => p.EsSena))
+                {
+                    <span><b>La seña</b> se paga solo por transferencia o tarjeta de débito.</span>
+                }
+                else
+                {
+                    <span><b>Efectivo o cheque:</b> pedí un turno para pagar en el salón (@PoliticaPagos.TextoHorario).</span>
+                }
+            </div>
+        }
+
+        <div class="detalle-grilla">
+            <section class="bloque">
+                <h4>Lo que contrataste</h4>
+                <ul class="lineas">
+                    <li><span>Paquete @c.Paquete.Nombre</span><b>@M(c.Paquete.Precio)</b></li>
+                    @foreach (var x in opciones)
+                    {
+                        <li><span>@x.Opcion.Nombre <small>@x.Opcion.Categoria?.Nombre</small></span><b>@(x.PrecioAcordado == 0 ? "Incluida" : "+ " + M(x.PrecioAcordado))</b></li>
+                    }
+                    <li class="total"><span>Valor acordado</span><b>@M(c.ValorRealAcordado)</b></li>
+                </ul>
+                @if (!string.IsNullOrEmpty(c.NotaCliente))
+                {
+                    <p class="nota-pago">Tu comentario: @c.NotaCliente</p>
+                }
+            </section>
+
+            <section class="bloque">
+                <h4>Pagos</h4>
+                <div class="progreso"><span style="width:@(porcentaje)%"></span></div>
+                <p class="progreso-txt">Pagaste @M(c.Pagado) de @M(c.ValorRealAcordado) (@porcentaje %)</p>
+                @if (c.EnRevision > 0)
+                {
+                    <p class="progreso-revision">@M(c.EnRevision) en revisión: se suma a lo pagado cuando el salón confirme el comprobante.</p>
+                }
+                @foreach (var p in abiertos)
+                {
+                    <p class="progreso-revision">Falta pagar: <b>@p.Concepto, @M(p.Monto)</b> (@p.MetodoPago.ToLower()).</p>
+                }
+
+                @if (historial.Any() || enRevision.Any())
+                {
+                    <ul class="pagos-lista">
+                        @foreach (var p in historial)
+                        {
+                            <li class="pago-item">
+                                <div class="pago-linea">
+                                    <div><b>@p.Concepto</b> <span class="pago-monto">@M(p.Monto)</span></div>
+                                    <span class="estado estado-@p.Estado">@EstadoPago.Etiqueta(p.Estado)</span>
+                                </div>
+                                <p class="pago-detalle">
+                                    @p.FechaPago.ToString("dd/MM/yyyy")@(p.Estado is "Confirmado" or "Pendiente" ? ", " + p.MetodoPago : "")
+                                    @if (!string.IsNullOrEmpty(p.Nota)) { <span>. @p.Nota</span> }
+                                </p>
+                                @if (!string.IsNullOrEmpty(p.RutaComprobanteImg))
+                                {
+                                    <div class="pago-acciones">
+                                        <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" data-ver-comprobante>Ver comprobante</a>
+                                        <a asp-controller="Archivos" asp-action="Comprobante" asp-route-id="@p.IdPago" asp-route-pdf="true">Descargar PDF</a>
+                                    </div>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="vacio">Todavía no hay pagos registrados.</p>
+                }
+
+                @if (c.PorSolicitar > 0 && paso != EtapaContrato.Paso.RedactarContrato && paso != EtapaContrato.Paso.EnviarContrato)
+                {
+                    <a asp-action="SubirPago" asp-route-id="@c.IdContrato" class="enlace" title="Si ya pagaste sin que el salón te mande el recibo, avisanos">¿Ya pagaste por tu cuenta? Informar un pago</a>
+                }
+            </section>
+        </div>
+    </article>
+}

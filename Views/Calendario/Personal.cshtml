@@ -1,0 +1,109 @@
+﻿@model List<Contrato>
+@{
+    var es = new System.Globalization.CultureInfo("es-AR");
+    var titulo = (string)ViewData["Titulo"]!;
+    var anio = (int)ViewData["Anio"]!;
+    var mes = (int)ViewData["Mes"]!;
+    var primero = new DateTime(anio, mes, 1);
+    ViewData["Title"] = "Agenda del personal";
+
+    string Horario(PaqueteEvento p) => p.DuracionHoras > 0
+        ? $"{p.HorarioReferencia:hh\\:mm} a {p.HorarioReferencia.Add(TimeSpan.FromHours(p.DuracionHoras)):hh\\:mm} hs"
+        : $"desde las {p.HorarioReferencia:hh\\:mm} hs";
+
+    // Una fila por persona y evento: coordinadores, empleados y artistas
+    var filas = new List<(string Persona, string Rol, DateTime Fecha, string Llegada, string Evento)>();
+    foreach (var c in Model)
+    {
+        var evento = $"{c.Paquete.Nombre}, {Horario(c.Paquete)}";
+        if (c.Paquete.Coordinador != null)
+            filas.Add((c.Paquete.Coordinador.NombreApellido, "Coordinación", c.FechaEvento, c.ContratoEmpleados.Any() ? $"{c.ContratoEmpleados.Min(x => x.HoraCitacion):hh\\:mm} hs" : "a confirmar", evento));
+        foreach (var x in c.ContratoEmpleados)
+            filas.Add((x.Empleado.NombreApellido, x.Empleado.Puesto, c.FechaEvento, $"{x.HoraCitacion:hh\\:mm} hs", evento));
+        foreach (var s in c.ContratoShows)
+            filas.Add((s.Show.NombreShow, s.Show.TipoShow, c.FechaEvento, $"show a las {s.Show.HorarioShow:hh\\:mm} hs", evento));
+    }
+    var personas = filas.GroupBy(f => (f.Persona, f.Rol)).OrderBy(g => g.Key.Persona).ToList();
+}
+
+<div class="no-imprimir">
+    <a class="volver" asp-action="Index" asp-route-anio="@anio" asp-route-mes="@mes">← Volver al calendario</a>
+</div>
+
+<div class="contratos-cab">
+    <div>
+        <h2>Agenda del personal: @titulo</h2>
+        <p class="crud-descripcion no-imprimir">
+            El personal y los artistas no tienen cuenta en el sitio. Desde acá podés imprimir la agenda del mes
+            o copiar el mensaje de cada persona para mandárselo por WhatsApp o mail.
+        </p>
+    </div>
+    <div class="d-flex gap-2 no-imprimir">
+        <a asp-action="Personal" asp-route-anio="@primero.AddMonths(-1).Year" asp-route-mes="@primero.AddMonths(-1).Month" class="btn btn-outline-dark btn-sm">← Mes anterior</a>
+        <a asp-action="Personal" asp-route-anio="@primero.AddMonths(1).Year" asp-route-mes="@primero.AddMonths(1).Month" class="btn btn-outline-dark btn-sm">Mes siguiente →</a>
+        <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">Imprimir</button>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <p class="vacio">No hay eventos en @titulo.</p>
+}
+else
+{
+    <section class="bloque">
+        <h3>Eventos del mes</h3>
+        <ul class="lineas">
+            @foreach (var c in Model)
+            {
+                <li><span><b>@c.FechaEvento.ToString("dddd d", es)</b>: @c.Paquete.Nombre</span><span>@Horario(c.Paquete)</span></li>
+            }
+        </ul>
+    </section>
+
+    @if (!personas.Any())
+    {
+        <p class="vacio">Todavía no se asignó personal ni shows a los eventos de este mes. Hacelo desde la ficha de cada contrato.</p>
+    }
+
+    <div class="agenda-personas">
+        @foreach (var g in personas)
+        {
+            var nombre = g.Key.Persona.Split(' ')[0];
+            var mensaje = $"Hola {nombre}! Te paso tus eventos en Prisma Salón para {titulo}:\n" +
+                string.Join("\n", g.OrderBy(f => f.Fecha).Select(f => $"- {f.Fecha.ToString("dddd d", es)}: {f.Evento}. Llegada: {f.Llegada}.")) +
+                "\nCualquier cambio te aviso. ¡Gracias!";
+            <article class="bloque agenda-persona">
+                <div class="ficha-cab">
+                    <div>
+                        <h4 class="mb-0">@g.Key.Persona</h4>
+                        <small class="text-muted">@g.Key.Rol, @g.Count() @(g.Count() == 1 ? "evento" : "eventos")</small>
+                    </div>
+                    <button type="button" class="btn btn-outline-dark btn-sm no-imprimir copiar-mensaje" data-mensaje="@mensaje">Copiar mensaje</button>
+                </div>
+                <table class="table table-sm align-middle mb-0 mt-2">
+                    <thead><tr><th>Día</th><th>Evento</th><th>Llegada</th></tr></thead>
+                    <tbody>
+                        @foreach (var f in g.OrderBy(f => f.Fecha))
+                        {
+                            <tr><td class="text-nowrap">@f.Fecha.ToString("ddd d/MM", es)</td><td>@f.Evento</td><td class="text-nowrap">@f.Llegada</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </article>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.copiar-mensaje').forEach(b => b.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(b.dataset.mensaje);
+                Swal.fire({ icon: 'success', title: 'Mensaje copiado', text: 'Pegalo en WhatsApp o en un mail.', timer: 1800, showConfirmButton: false });
+            } catch {
+                Swal.fire({ icon: 'info', title: 'Copialo a mano', text: b.dataset.mensaje });
+            }
+        }));
+    </script>
+}

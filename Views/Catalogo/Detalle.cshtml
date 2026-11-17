@@ -1,0 +1,243 @@
+﻿@model PaqueteEvento
+@{
+    ViewData["Title"] = Model.Nombre;
+    var logueado = (bool)ViewData["Logueado"]!;
+    var categorias = (List<CategoriaOpcion>)ViewData["Categorias"]!;
+    var items = (Model.Incluye ?? "").Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    var parrafos = (Model.DescripcionDetallada ?? "").Replace("\r", "")
+        .Split("\n\n", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+    var volver = Context.Request.Path.ToString();
+
+    // Carrusel: solamente fotografías de la galería.
+    var galeria = (List<string>)ViewData["Galeria"]!;
+    var slides = galeria.Select(f => Url.Content(f)).ToList();
+}
+
+<a class="volver enlace" asp-controller="Home" asp-action="Index" asp-fragment="paquetes">← Volver a los paquetes</a>
+
+<div class="detalle-cab">
+    <div class="detalle-texto">
+        <h1>@Model.Nombre</h1>
+        <p class="detalle-lead">@Model.Descripcion</p>
+
+        @foreach (var par in parrafos)
+        {
+            <p>@par</p>
+        }
+
+        @if (Model.CapacidadInvitados > 0 || logueado)
+        {
+            <div class="datos">
+                @if (Model.CapacidadInvitados > 0)
+                {
+                    <div>
+                        <small>Capacidad</small>
+                        <b>Hasta @Model.CapacidadInvitados invitados</b>
+                    </div>
+                }
+
+                @if (logueado)
+                {
+                    <div>
+                        <small>Desde</small>
+                        <b>@Model.Precio.ToString("C0")</b>
+                    </div>
+                    <div>
+                        <small>Duración</small>
+                        <b>@Model.DuracionHoras horas</b>
+                    </div>
+                    <div>
+                        <small>Horario de referencia</small>
+                        <b>@Model.HorarioReferencia.ToString(@"hh\:mm") hs</b>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (logueado)
+        {
+            @if (Model.Coordinador != null)
+            {
+                <p>Coordinador a cargo: <b>@Model.Coordinador.NombreApellido</b></p>
+            }
+
+            <div class="aviso aviso-sena"><b>Seña obligatoria para reservar:</b> @PoliticaPagos.PorcentajeSena % del valor (@((Model.Precio * PoliticaPagos.PorcentajeSena / 100m).ToString("C0")) sobre el precio base), por transferencia o tarjeta de débito.</div>
+            <div class="detalle-acciones">
+                @if (User.IsInRole("Cliente"))
+                {
+                    <a class="btn btn-primary" asp-action="Personalizar" asp-route-id="@Model.IdPaquete" data-aviso-sena>Personalizar y pedir este paquete</a>
+                    <small>Sumá DJ, iluminación, paleta y mobiliario (tienen cobro extra) y enviá tu pedido.</small>
+                }
+                <a class="btn btn-outline-dark"
+                   href="mailto:consultas@prismasalon.com?subject=Consulta%20por%20el%20paquete%20@(Uri.EscapeDataString(Model.Nombre))">
+                    Consultar por mail
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="acceso-registro">
+                <h3>Mirá todo lo que podés elegir</h3>
+                <p>
+                    Con tu cuenta ves los precios, la duración, el coordinador y las opciones
+                    para armar tu evento: DJ, iluminación, paleta de colores y mobiliario.
+                </p>
+
+                <a class="btn btn-primary"
+                   asp-area="Identity"
+                   asp-page="/Account/Register"
+                   asp-route-returnUrl="@volver">
+                    Crear mi cuenta
+                </a>
+
+                <a class="btn btn-link"
+                   asp-area="Identity"
+                   asp-page="/Account/Login"
+                   asp-route-returnUrl="@volver">
+                    Ya tengo cuenta
+                </a>
+            </div>
+        }
+    </div>
+
+    @* Carrusel de fotografías *@
+    @if (slides.Any())
+    {
+        <div id="carruselPaquete"
+             class="carousel slide carousel-fade carrusel"
+             data-bs-ride="carousel"
+             data-bs-interval="2000"
+             aria-label="Ideas para tu evento">
+
+            <div class="carousel-indicators">
+                @for (var i = 0; i < slides.Count; i++)
+                {
+                    <button type="button"
+                            data-bs-target="#carruselPaquete"
+                            data-bs-slide-to="@i"
+                            class="@(i == 0 ? "active" : "")"
+                            aria-label="Imagen @(i + 1)">
+                    </button>
+                }
+            </div>
+
+            <div class="carousel-inner">
+                @for (var i = 0; i < slides.Count; i++)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <img src="@slides[i]"
+                             alt="Imagen del paquete @Model.Nombre" />
+                    </div>
+                }
+            </div>
+
+            <button class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#carruselPaquete"
+                    data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+
+            <button class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#carruselPaquete"
+                    data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+
+        </div>
+    }
+</div>
+
+@if (items.Any())
+{
+    <section class="seccion-det">
+        <h2>Qué incluye</h2>
+
+        <ul class="incluye">
+            @foreach (var i in items)
+            {
+                <li>@i</li>
+            }
+        </ul>
+    </section>
+}
+
+@if (logueado && categorias.Any(c => c.Opciones.Any()))
+{
+    <section class="seccion-det">
+        <h2>Personalizá tu evento</h2>
+        <p>
+            Estas opciones tienen cobro extra y se suman al valor del paquete.
+            @if (User.IsInRole("Cliente"))
+            {
+                <a asp-action="Personalizar" asp-route-id="@Model.IdPaquete">Elegilas y enviá tu pedido</a>
+            }
+        </p>
+
+        @foreach (var cat in categorias.Where(c => c.Opciones.Any()))
+        {
+            <div class="grupo-opc">
+                <h3>@cat.Nombre</h3>
+
+                <p class="nota">
+                    @(cat.EsMultiple
+                        ? "Podés combinar varias opciones."
+                        : "Se elige una opción.")
+                </p>
+
+                <div class="opciones">
+                    @foreach (var o in cat.Opciones.OrderBy(o => o.PrecioAdicional))
+                    {
+                        <div class="opcion-card">
+                            <h4>@o.Nombre</h4>
+
+                            @if (!string.IsNullOrEmpty(o.Colores))
+                            {
+                                <div class="paleta">
+                                    @foreach (var col in o.Colores.Split(','))
+                                    {
+                                        <span class="muestra"
+                                              style="background:@col"
+                                              title="@col">
+                                        </span>
+                                    }
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(o.Descripcion))
+                            {
+                                <p>@o.Descripcion</p>
+                            }
+
+                            <span class="opcion-precio">
+                                @(o.PrecioAdicional == 0
+                                    ? "Incluida"
+                                    : "+ " + o.PrecioAdicional.ToString("C0"))
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </section>
+}
+
+@section Scripts {
+    <script>
+        // Antes de seguir con el paquete, el cliente tiene que leer y aceptar la regla de la seña
+        document.querySelectorAll('[data-aviso-sena]').forEach(a => a.addEventListener('click', e => {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'info',
+                title: 'Antes de seguir: seña obligatoria',
+                text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(PoliticaPagos.TextoAviso)),
+                showCancelButton: true,
+                confirmButtonText: 'Entendido, continuar',
+                cancelButtonText: 'Volver'
+            }).then(r => { if (r.isConfirmed) window.location = a.href; });
+        }));
+    </script>
+}

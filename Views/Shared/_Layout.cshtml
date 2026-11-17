@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Prisma Salón</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500&family=Marcellus&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="icon" type="image/svg+xml" href="~/img/favicon.svg" />
+    <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="@(ViewData["Completo"] != null ? "inicio" : "")">
+    <header class="cabecera">
+        <div class="cabecera-fila">
+            <span></span>
+            <a class="marca" asp-area="" asp-controller="Home" asp-action="Index" aria-label="Prisma Salón, ir al inicio">
+                <partial name="_Logo" />
+                <span>Prisma Salón</span>
+            </a>
+            <partial name="_LoginPartial" />
+        </div>
+        <nav class="menu">
+            <a asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
+            @if (User.IsInRole("Administrador"))
+            {
+                <a asp-area="" asp-controller="Contratos" asp-action="Index">Contratos</a>
+                <a asp-area="" asp-controller="Calendario" asp-action="Index">Calendario</a>
+                <a asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                <a asp-area="" asp-controller="Paquetes" asp-action="Index">Paquetes</a>
+                <a asp-area="" asp-controller="Categorias" asp-action="Index">Categorías</a>
+                <a asp-area="" asp-controller="Opciones" asp-action="Index">Opciones</a>
+                <a asp-area="" asp-controller="Shows" asp-action="Index">Shows</a>
+                <a asp-area="" asp-controller="Coordinadores" asp-action="Index">Coordinadores</a>
+                <a asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                <a asp-area="" asp-controller="Resenas" asp-action="Index">Reseñas</a>
+                <a asp-area="" asp-controller="Auditoria" asp-action="Index">Auditoría</a>
+            }
+            else
+            {
+                <a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="paquetes">Paquetes</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="proceso">Cómo trabajamos</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="experiencias">Experiencias</a>
+                <a asp-area="" asp-controller="Calendario" asp-action="Index">Disponibilidad</a>
+            }
+            @if (User.IsInRole("Cliente"))
+            {
+                <a asp-area="" asp-controller="MisContratos" asp-action="Index">Mis contratos</a>
+                <a asp-area="" asp-controller="Resenas" asp-action="Mias">Mis opiniones</a>
+            }
+        </nav>
+    </header>
+
+    <main class="@(ViewData["Completo"] == null ? "contenedor principal" : "")">
+        @RenderBody()
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor pie-fila">
+            <div>
+                <div class="pie-marca"><partial name="_Logo" /> Prisma Salón</div>
+                <p>Eventos sociales y empresariales, coordinados de principio a fin.</p>
+            </div>
+            <div>
+                <h4>Contacto</h4>
+                <p>consultas@prismasalon.com</p>
+            </div>
+            <div>
+                <h4>Secciones</h4>
+                <p><a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="paquetes">Paquetes</a></p>
+                <p><a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="proceso">Cómo trabajamos</a></p>
+                <p><a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="experiencias">Experiencias</a></p>
+                @if (User.Identity?.IsAuthenticated != true)
+                {
+                    <p><a asp-area="Identity" asp-page="/Account/Login">Iniciar sesión</a></p>
+                }
+            </div>
+        </div>
+        <div class="contenedor"><div class="pie-legal">© 2026 Prisma Salón</div></div>
+    </footer>
+
+    @* El asistente es para visitantes y clientes; el admin no lo necesita *@
+    @if (!User.IsInRole("Administrador"))
+    {
+        <partial name="_Chat" />
+    }
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/chat.js" asp-append-version="true"></script>
+    <script src="~/js/animaciones.js" asp-append-version="true"></script>
+    @if (TempData["ok"] != null)
+    {
+        <script>Swal.fire({icon:'success', title:'@TempData["ok"]', timer:2200, showConfirmButton:false});</script>
+    }
+    @if (TempData["error"] != null)
+    {
+        <script>Swal.fire({icon:'error', title:'Error', text:'@TempData["error"]'});</script>
+    }
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

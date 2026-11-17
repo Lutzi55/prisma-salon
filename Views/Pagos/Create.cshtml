@@ -1,0 +1,58 @@
+﻿@model PagoVM
+@{
+    var c = (Contrato)ViewData["Contrato"]!;
+    ViewData["Title"] = "Registrar pago recibido";
+    var es = new System.Globalization.CultureInfo("es-AR");
+}
+<a class="volver" asp-controller="Contratos" asp-action="Detalle" asp-route-id="@c.IdContrato">← Volver al contrato</a>
+<h2>Registrar pago recibido</h2>
+<p class="crud-descripcion">
+    Usalo cuando el cliente te pagó en mano (efectivo o cheque) o por transferencia sin pasar por la web.
+    El pago queda <b>confirmado</b> directamente. @c.Cliente.RazonSocialApellido, evento del @c.FechaEvento.ToString("dd/MM/yyyy").
+    Saldo pendiente: <b>$ @((c.ValorRealAcordado - c.Pagado - c.EnRevision).ToString("N0", es))</b>.
+</p>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="col-md-7">
+    <input type="hidden" asp-for="IdContrato" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="Monto" class="form-label"></label>
+            <input asp-for="Monto" type="number" step="0.01" class="form-control" />
+            <span asp-validation-for="Monto" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="FechaPago" class="form-label"></label>
+            <input asp-for="FechaPago" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="MetodoPago" class="form-label"></label>
+            <select asp-for="MetodoPago" class="form-select">
+                <option value="">Seleccioná...</option>
+                <option>Transferencia</option>
+                <option>Cheque</option>
+                <option>Efectivo</option>
+                <option>Depósito</option>
+                <option>Tarjeta de débito</option>
+            </select>
+            <span asp-validation-for="MetodoPago" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Concepto" class="form-label"></label>
+            <input asp-for="Concepto" class="form-control" placeholder="Ej: Seña, saldo final" />
+            <span asp-validation-for="Concepto" class="text-danger"></span>
+        </div>
+        <div class="col-12">
+            <label asp-for="Comprobante" class="form-label">Comprobante o foto del cheque (JPG o PNG, hasta 3 MB)</label>
+            <input asp-for="Comprobante" type="file" accept="image/png,image/jpeg" class="form-control" />
+            <span asp-validation-for="Comprobante" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button class="btn btn-primary">Registrar pago</button>
+        <a asp-controller="Contratos" asp-action="Detalle" asp-route-id="@c.IdContrato" class="btn btn-link">Cancelar</a>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
