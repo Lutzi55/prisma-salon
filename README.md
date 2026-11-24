@@ -5,7 +5,7 @@ Sistema web de **planificación y contratación de eventos** para un salón: cat
 Trabajo Final Integrador · Programación Web · ASP.NET Core MVC
 
 > **Sitio publicado:** http://prismasalon.runasp.net
-> **Autora:** Lucía Gross
+> **Autora:** Lucía Manzano
 
 ---
 
