@@ -14,7 +14,7 @@ Trabajo Final Integrador · Programación Web · ASP.NET Core MVC
 | Rol | Correo | Contraseña |
 | --- | --- | --- |
 | Administrador | admin@eventos.com | Admin123! |
-| Cliente de prueba 1 | cliente@eventos.com | Cliente123 |
+| Cliente de prueba 1 | cliente1@evento.com | Cliente123 |
 
 El cliente de prueba ya tiene contratos, pagos en distintos estados y un evento pasado para dejar una opinión. También se puede crear una cuenta nueva desde *Registrarse*.
 
